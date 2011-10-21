@@ -19,6 +19,7 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Register;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -30,6 +31,7 @@ public class RegisterPane extends Panel {
 
 	private TextField txtAlias;
 	private TextField txtName;
+	private TextField txtCedula;
 	private TextField txtMail;
 	private PasswordField fldPassword;
 	private PasswordField fldConfirmPassword;
@@ -90,6 +92,15 @@ public class RegisterPane extends Panel {
 		txtName.setWidth(new Extent(300));
 		grid.add(txtName);
 
+		Label lblCedula = new Label("CÃ©dula:");
+		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL);
+		grid.add(lblCedula);
+
+		txtCedula = new TextField();
+		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
+		txtCedula.setWidth(new Extent(300));
+		grid.add(txtCedula);
+
 		Label lblMail = new Label("Correo:");
 		GUIStyles.setFont(lblMail, GUIStyles.NORMAL);
 		grid.add(lblMail);
@@ -108,7 +119,7 @@ public class RegisterPane extends Panel {
 		userTypeMenu[1] = "Estudiante";
 		userTypeMenu[2] = "Profesor";
 
-		selUserType = new SelectField(getUserTypeMenu());
+		selUserType = new SelectField(userTypeMenu);
 		selUserType.setHeight(new Extent(25));
 		selUserType.setWidth(new Extent(305));
 		GUIStyles.setFont(selUserType, GUIStyles.NORMAL);
@@ -120,7 +131,7 @@ public class RegisterPane extends Panel {
 		});
 		grid.add(selUserType);
 
-		Label lblPassword = new Label("Contraseña:");
+		Label lblPassword = new Label("ContraseÃ±a:");
 		GUIStyles.setFont(lblPassword, GUIStyles.NORMAL);
 		grid.add(lblPassword);
 
@@ -129,7 +140,7 @@ public class RegisterPane extends Panel {
 		fldPassword.setWidth(new Extent(300));
 		grid.add(fldPassword);
 
-		Label lblConfirmPassword = new Label("Confirmar Contraseña:");
+		Label lblConfirmPassword = new Label("Confirmar ContraseÃ±a:");
 		GUIStyles.setFont(lblConfirmPassword, GUIStyles.NORMAL);
 		grid.add(lblConfirmPassword);
 
@@ -207,23 +218,31 @@ public class RegisterPane extends Panel {
 			}
 
 			errorRow = new Row();
-			Label lblError = new Label("Por favor confirma tu contraseña");
+			Label lblError = new Label("Por favor confirma tu contraseÃ±a");
 			GUIStyles.setFont(lblError, GUIStyles.ITALIC);
 			errorRow.add(lblError);
 			errorRow.setAlignment(Alignment.ALIGN_CENTER);
 			col.add(errorRow);
 
-			fldPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			getFldPassword().set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
 			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
 
 			return;
 
 		}
 
-		//TODO: check user from database
-
 		if (checkEmptyFields()) {
 			return;
+		}
+
+		try {
+
+			if (!Register.createUser(this)) {
+				return;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		if (selUserType.getSelectedIndex() == 1) {
@@ -243,7 +262,7 @@ public class RegisterPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private boolean checkEmptyFields() {
+	public boolean checkEmptyFields() {
 
 		boolean flg = false;
 
@@ -311,6 +330,48 @@ public class RegisterPane extends Panel {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public TextField getTxtAlias() {
+		return txtAlias;
+	}
+
+	public void setTxtAlias(TextField txtAlias) {
+		this.txtAlias = txtAlias;
+	}
+
+	public TextField getTxtName() {
+		return txtName;
+	}
+
+	public void setTxtName(TextField txtName) {
+		this.txtName = txtName;
+	}
+
+	public TextField getTxtMail() {
+		return txtMail;
+	}
+
+	public void setTxtMail(TextField txtMail) {
+		this.txtMail = txtMail;
+	}
+
+	public PasswordField getFldPassword() {
+		return fldPassword;
+	}
+
+	public void setFldPassword(PasswordField fldPassword) {
+		this.fldPassword = fldPassword;
+	}
+
+	public TextField getTxtCedula() {
+		return txtCedula;
+	}
+
+	public void setTxtCedula(TextField txtCedula) {
+		this.txtCedula = txtCedula;
 	}
 
 	// --------------------------------------------------------------------------------
