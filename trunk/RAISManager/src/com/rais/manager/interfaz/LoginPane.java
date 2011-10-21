@@ -18,6 +18,7 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.Desktop.DesktopType;
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Login;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -60,7 +61,7 @@ public class LoginPane extends Panel {
 		GUIStyles.setFont(txtUser, GUIStyles.NORMAL);
 		grid.add(txtUser);
 
-		Label lblPassword = new Label("ContraseÒa:");
+		Label lblPassword = new Label("Contrase√±a:");
 		GUIStyles.setFont(lblPassword, GUIStyles.NORMAL);
 		grid.add(lblPassword);
 
@@ -104,6 +105,8 @@ public class LoginPane extends Panel {
 
 	}
 
+	// --------------------------------------------------------------------------------
+
 	protected void btnRegisterClicked() {
 
 		RegisterPane pane = new RegisterPane();
@@ -111,21 +114,49 @@ public class LoginPane extends Panel {
 
 	}
 
+	// --------------------------------------------------------------------------------
+
 	protected void btnEnterClicked() {
 
-//		if (txtUser.getText().isEmpty()) {
-//			app.getDesktop().setWindowPaneEmergente( //
-//					"Ingrese el nombre de usuario");
-//			return;
-//		}
-//		if (fldPassword.getText().isEmpty()) {
-//			app.getDesktop().setWindowPaneEmergente( //
-//					"Ingrese la contraseÒa");
-//			return;
-//		}
+		if (txtUser.getText().isEmpty()) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Ingrese el nombre de usuario");
+			return;
+		}
+		if (fldPassword.getText().isEmpty()) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Ingrese la contrase√±a");
+			return;
+		}
+
+		if (!Login.login(this)) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Usuario no v√°lido");
+			return;
+		}
 
 		app.setNewDesktop(DesktopType.MAIN);
 
 	}
+
+	// --------------------------------------------------------------------------------
+
+	public TextField getTxtUser() {
+		return txtUser;
+	}
+
+	public void setTxtUser(TextField txtUser) {
+		this.txtUser = txtUser;
+	}
+
+	public PasswordField getFldPassword() {
+		return fldPassword;
+	}
+
+	public void setFldPassword(PasswordField fldPassword) {
+		this.fldPassword = fldPassword;
+	}
+
+	// --------------------------------------------------------------------------------
 
 }

@@ -20,10 +20,13 @@ import org.hibernate.annotations.Proxy;
 @Proxy(lazy = false)
 public class Estudiante {
 
-	private String cedula;
-	private String nombre;
-	private List<EvalEstudiante> listaEvalEstudiante;
 	private int id;
+	private String alias;
+	private String nombre;
+	private String cedula;
+	private String mail;
+	private String password;
+	private List<EvalEstudiante> listaEvalEstudiante;
 	private List<Encuesta> listaEncuestas;
 	private List<GrupoEstudiante> listaGrupoEstudiante;
 
@@ -41,6 +44,26 @@ public class Estudiante {
 
 	// --------------------------------------------------------------------------------
 
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
@@ -51,12 +74,22 @@ public class Estudiante {
 
 	// --------------------------------------------------------------------------------
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public String getMail() {
+		return mail;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	// --------------------------------------------------------------------------------
