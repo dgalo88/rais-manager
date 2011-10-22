@@ -1,6 +1,5 @@
 package com.rais.manager.interfaz;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import nextapp.echo.app.Alignment;
@@ -21,6 +20,7 @@ import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Polls;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -54,7 +54,7 @@ public class AutoCoEvaluationPane extends Panel {
 		headerRow.setAlignment(Alignment.ALIGN_CENTER);
 		headerRow.setCellSpacing(new Extent(30));
 
-		headerRow.add(Constructor.initTopRow("Cuestionario de Auto y Coevaluación", 14));
+		headerRow.add(Constructor.initTopRow("Cuestionario de Auto y CoevaluaciÃ³n", 14));
 
 		Button btnHelp = new Button("?");
 		btnHelp.setToolTipText("Ver Instrucciones");
@@ -119,7 +119,7 @@ public class AutoCoEvaluationPane extends Panel {
 		Row centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_CENTER);
 
-		Label lblAuto = new Label("1. Auto-evaluación");
+		Label lblAuto = new Label("1. Auto-evaluaciÃ³n");
 		GUIStyles.setFont(lblAuto, GUIStyles.BOLD, 12);
 		centerRow.add(lblAuto);
 		col.add(centerRow);
@@ -129,7 +129,7 @@ public class AutoCoEvaluationPane extends Panel {
 
 		//Header Row
 
-		Label lblNo = new Label("N°");
+		Label lblNo = new Label("No.");
 		GUIStyles.setFont(lblNo, GUIStyles.BOLD, 12);
 		centerRow.add(lblNo);
 		grid.add(centerRow);
@@ -187,9 +187,9 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_1 = new Label("¿Cómo evalúa el producto desarrollado por su compañía? " +
+		Label lblElement1_1 = new Label("Â¿CÃ³mo evalÃºa el producto desarrollado por su compaÃ±Ã­a? " +
 				"\n(considere calidad del producto, logro de los objetivos, " +
-				"cantidad de funcionalidad implementada, etcétera)");
+				"cantidad de funcionalidad implementada, etcÃ©tera)");
 		GUIStyles.setFont(lblElement1_1, GUIStyles.NORMAL, 12);
 		centerRow.add(lblElement1_1);
 		grid.add(centerRow);
@@ -241,8 +241,8 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_2 = new Label("¿Cómo evalúa el desempeño de su compañía? " +
-				"(considere el logro de objetivos, eficiencia, etcétera)");
+		Label lblElement1_2 = new Label("Â¿CÃ³mo evalÃºa el desempeÃ±o de su compaÃ±Ã­a? " +
+				"(considere el logro de objetivos, eficiencia, etcÃ©tera)");
 		GUIStyles.setFont(lblElement1_2, GUIStyles.NORMAL, 12);
 		centerRow.add(lblElement1_2);
 		grid.add(centerRow);
@@ -294,9 +294,9 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_3 = new Label("¿Cómo evalúa SU desempeño dentro de su compañía? " +
+		Label lblElement1_3 = new Label("Â¿CÃ³mo evalÃºa SU desempeÃ±o dentro de su compaÃ±Ã­a? " +
 				"(considere el logro de objetivos, eficiencia, " +
-				"participación, aportes, responsabilidad, etcétera)");
+				"participaciÃ³n, aportes, responsabilidad, etcÃ©tera)");
 		GUIStyles.setFont(lblElement1_3, GUIStyles.NORMAL, 12);
 		centerRow.add(lblElement1_3);
 		grid.add(centerRow);
@@ -348,10 +348,10 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_4 = new Label("¿Cómo evalúa de forma global el desempeño " +
-				"de sus compañeros en su compañía? " +
+		Label lblElement1_4 = new Label("Â¿CÃ³mo evalÃºa de forma global el desempeÃ±o " +
+				"de sus compaÃ±eros en su compaÃ±Ã­a? " +
 				"(considere logro de objetivos, eficiencia, " +
-				"participación, aportes, responsabilidad, etcétera)");
+				"participaciÃ³n, aportes, responsabilidad, etcÃ©tera)");
 		GUIStyles.setFont(lblElement1_4, GUIStyles.NORMAL, 12);
 		centerRow.add(lblElement1_4);
 		grid.add(centerRow);
@@ -403,7 +403,7 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_5 = new Label("¿Cuál considera que fue su dedicación " +
+		Label lblElement1_5 = new Label("Â¿CuÃ¡l considera que fue su dedicaciÃ³n " +
 				"de tiempo al desarrollo del producto?");
 		GUIStyles.setFont(lblElement1_5, GUIStyles.NORMAL, 12);
 		centerRow.add(lblElement1_5);
@@ -480,13 +480,13 @@ public class AutoCoEvaluationPane extends Panel {
 		Row centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_CENTER);
 
-		Label lblAuto = new Label("2. Co-evaluación");
+		Label lblAuto = new Label("2. Co-evaluaciÃ³n");
 		GUIStyles.setFont(lblAuto, GUIStyles.BOLD, 12);
 		centerRow.add(lblAuto);
 		col.add(centerRow);
 
-		Label lblText = new Label("Evalúe el desempeño que usted considera que tuvieron " +
-				"dentro de la compañía cada uno de sus integrantes.");
+		Label lblText = new Label("EvalÃºe el desempeÃ±o que usted considera que tuvieron " +
+				"dentro de la compaÃ±Ã­a cada uno de sus integrantes.");
 		GUIStyles.setFont(lblText, GUIStyles.BOLD, 12);
 		col.add(lblText);
 
@@ -532,9 +532,8 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow.add(lblD);
 		grid.add(centerRow);
 
-		//Cargar Compañeros
-
-		addTempPartners();
+		//Cargar CompaÃ±eros
+		partnersList = Polls.loadPartnersData();
 
 		for (int i = 0; i < partnersList.size(); i++) {
 
@@ -607,10 +606,10 @@ public class AutoCoEvaluationPane extends Panel {
 		Column col = new Column();
 		col.setCellSpacing(new Extent(15));
 
-		Label lblQuestion1 = new Label("3. ¿Considera que el desempeño del gerente " +
-				"de la compañía ha sido adecuado? " +
+		Label lblQuestion1 = new Label("3. Â¿Considera que el desempeÃ±o del gerente " +
+				"de la compaÃ±Ã­a ha sido adecuado? " +
 				"Si la respuesta es negativa, explique de forma breve " +
-				"la razón y proponga un nuevo gerente.");
+				"la razÃ³n y proponga un nuevo gerente.");
 		GUIStyles.setFont(lblQuestion1, GUIStyles.NORMAL);
 		col.add(lblQuestion1);
 
@@ -620,9 +619,9 @@ public class AutoCoEvaluationPane extends Panel {
 		txtAnswer1.setHeight(new Extent(height));
 		col.add(txtAnswer1);
 
-		Label lblQuestion2 = new Label("4. ¿Considera que el desempeño del director " +
-				"de la compañía ha sido adecuado? Si la respuesta es negativa, " +
-				"explique de forma breve la razón y proponga un nuevo director.");
+		Label lblQuestion2 = new Label("4. Â¿Considera que el desempeÃ±o del director " +
+				"de la compaÃ±Ã­a ha sido adecuado? Si la respuesta es negativa, " +
+				"explique de forma breve la razÃ³n y proponga un nuevo director.");
 		GUIStyles.setFont(lblQuestion2, GUIStyles.NORMAL);
 		col.add(lblQuestion2);
 
@@ -633,9 +632,9 @@ public class AutoCoEvaluationPane extends Panel {
 		col.add(txtAnswer2);
 
 		Label lblQuestion3 = new Label("5. Si pudiera retroceder en el tiempo " +
-				"y cambiar algo en relación al desarrollo del producto, " +
-				"la interacción con sus compañeros, su participación " +
-				"en el curso/producto, etcétera, ¿Qué sería?");
+				"y cambiar algo en relaciÃ³n al desarrollo del producto, " +
+				"la interacciÃ³n con sus compaÃ±eros, su participaciÃ³n " +
+				"en el curso/producto, etcÃ©tera, Â¿QuÃ© serÃ­a?");
 		GUIStyles.setFont(lblQuestion3, GUIStyles.NORMAL);
 		col.add(lblQuestion3);
 
@@ -677,7 +676,8 @@ public class AutoCoEvaluationPane extends Panel {
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnNext2Clicked();
+//				btnNext2Clicked();
+				sendPoll();
 			}
 		});
 		buttonRow.add(btnNext);
@@ -687,6 +687,7 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
+	@SuppressWarnings("unused")
 	private void btnNext2Clicked() {
 
 		col.remove(buttonRow);
@@ -703,7 +704,7 @@ public class AutoCoEvaluationPane extends Panel {
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				sendSurvey();
+				sendPoll();
 			}
 		});
 		buttonRow.add(btnNext);
@@ -713,7 +714,7 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void sendSurvey() {
+	private void sendPoll() {
 
 		//TODO
 		MainPane pane = new MainPane();
@@ -732,16 +733,5 @@ public class AutoCoEvaluationPane extends Panel {
 	}
 
 	// --------------------------------------------------------------------------------
-
-	private void addTempPartners() {
-
-		//TODO
-		partnersList = new ArrayList<String>();
-		partnersList.add("Pedro Pablo Pérez Paredes");
-		partnersList.add("Jose Jose Juarez");
-		partnersList.add("Juan Jose Landaeta");
-		partnersList.add("Cristobal A. Colón R.");
-
-	}
 
 }

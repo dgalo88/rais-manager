@@ -31,8 +31,8 @@ public class AutoCoInstructionsPane extends Panel {
 		col.add(Constructor.initTopRow("Instrucciones"));
 
 		Label lbl1 = new Label("Por favor lea cuidadosamente cada una " +
-				"de las preguntas planteadas y responda según sea su nivel " +
-				"de apreciación con una sola opción.");
+				"de las preguntas planteadas y responda segÃºn sea su nivel " +
+				"de apreciaciÃ³n con una sola opciÃ³n.");
 		GUIStyles.setFont(lbl1, GUIStyles.NORMAL);
 		col.add(lbl1);
 
@@ -119,13 +119,13 @@ public class AutoCoInstructionsPane extends Panel {
 		col.add(centerGrid);
 
 		Label lbl3 = new Label("Sea sincero en sus respuestas, tenga en mente " +
-				"que esta información se cruza con la aportada por sus compañeros " +
+				"que esta informaciÃ³n se cruza con la aportada por sus compaÃ±eros " +
 				"y con la establecida en base al criterio del Jefe Ejecutivo.");
 		GUIStyles.setFont(lbl3, GUIStyles.NORMAL);
 		col.add(lbl3);
 
-		Label lbl4 = new Label("Considere también que a pesar de no ser anónima " +
-				"la información de esta encuesta es confidencial y sólo será vista " +
+		Label lbl4 = new Label("Considere tambiÃ©n que a pesar de no ser anÃ³nima " +
+				"la informaciÃ³n de esta encuesta es confidencial y sÃ³lo serÃ¡ vista " +
 				"y utilizada por el Jefe Ejecutivo.");
 		GUIStyles.setFont(lbl4, GUIStyles.NORMAL);
 		col.add(lbl4);

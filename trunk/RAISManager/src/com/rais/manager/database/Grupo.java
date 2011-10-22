@@ -28,6 +28,18 @@ public class Grupo {
 
 	// --------------------------------------------------------------------------------
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
+		return id;
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -44,18 +56,6 @@ public class Grupo {
 
 	public byte[] getLogo() {
 		return logo;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public int getId() {
-		return id;
 	}
 
 	// --------------------------------------------------------------------------------

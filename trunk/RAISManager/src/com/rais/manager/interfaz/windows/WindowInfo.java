@@ -23,9 +23,9 @@ public class WindowInfo extends WindowPane {
 		initWindow(text);
 	}
 
-	private void initWindow(String text) {
+	private void initWindow(String info) {
 
-		setTitle("Información");
+		setTitle("InformaciÃ³n");
 		setWidth(new Extent(300));
 		setHeight(new Extent(150));
 		setModal(true);
@@ -44,8 +44,9 @@ public class WindowInfo extends WindowPane {
 		GUIStyles.setFont(row, GUIStyles.NORMAL);
 		row.setAlignment(Alignment.ALIGN_CENTER);
 
-		Label txt = new Label(text);
-		row.add(txt);
+		Label lblInfo = new Label(info);
+		lblInfo.setTextAlignment(Alignment.ALIGN_CENTER);
+		row.add(lblInfo);
 		col.add(row);
 
 		row = new Row();

@@ -19,6 +19,8 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Register;
+import com.rais.manager.database.Estudiante;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -27,6 +29,8 @@ public class RegisterStudentPane extends Panel {
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
 	private Desktop desktop;
+
+	private Estudiante student;
 
 	private SelectField companySelectField;
 	private String[] companyMenu;
@@ -37,8 +41,9 @@ public class RegisterStudentPane extends Panel {
 	private Column col;
 	private Row errorRow;
 
-	public RegisterStudentPane() {
+	public RegisterStudentPane(Estudiante student) {
 
+		this.student = student;
 		desktop = app.getDesktop();
 		initGui();
 
@@ -67,17 +72,12 @@ public class RegisterStudentPane extends Panel {
 		col.add(Constructor.initTopRow("Registro de Usuario", 14));
 		col.add(Constructor.initTopRow("Datos Personales:", 13));
 
-		Label lblCompany = new Label("Seleccione su Compañía:");
+		Label lblCompany = new Label("Seleccione su CompaÃ±Ã­a:");
 		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL);
 		grid.add(lblCompany);
 
-		//Esta lista se obtiene de la bd
-		companyMenu = new String[5];
-		companyMenu[0] = "Seleccione su Compañía";
-		companyMenu[1] = "Compañía 1";
-		companyMenu[2] = "Compañía 2";
-		companyMenu[3] = "Compañía 3";
-		companyMenu[4] = "Compañía 4";
+		// Cargar compaÃ±Ã­as
+		companyMenu = Register.loadCompaniesData();
 
 		companySelectField = new SelectField(getCompanyMenu());
 		companySelectField.setHeight(new Extent(25));
@@ -102,7 +102,7 @@ public class RegisterStudentPane extends Panel {
 
 		buttonGroup = new ButtonGroup();
 
-		RadioButton isBtn = new RadioButton("Ingeniería de Software");
+		RadioButton isBtn = new RadioButton("IngenierÃ­a de Software");
 		isBtn.setDisabledForeground(Color.LIGHTGRAY);
 		isBtn.setGroup(buttonGroup);
 		radioBtnRow.add(isBtn);
@@ -127,12 +127,16 @@ public class RegisterStudentPane extends Panel {
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
-		Button btnBack = new Button("Atrás");
+		Button btnBack = new Button("AtrÃ¡s");
 		btnBack.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnBack.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnBackClicked();
+			public void actionPerformed(ActionEvent evt) {
+				try {
+					btnBackClicked();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		rowButtons.add(btnBack);
@@ -141,7 +145,7 @@ public class RegisterStudentPane extends Panel {
 		btnRegister.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evt) {
 				btnRegisterClicked();
 			}
 		});
@@ -158,10 +162,8 @@ public class RegisterStudentPane extends Panel {
 	protected void companySelected(int selectedIndex) {
 
 		if (selectedIndex == 0) {
-
 			setDepartmentsEnable(false);
 			return;
-
 		}
 		setDepartmentsEnable(true);
 
@@ -169,9 +171,9 @@ public class RegisterStudentPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void btnBackClicked() {
+	private void btnBackClicked() throws Exception {
 
-		RegisterPane pane = new RegisterPane();
+		RegisterPane pane = new RegisterPane(student);
 		desktop.setCentralPanel(pane);
 
 	}

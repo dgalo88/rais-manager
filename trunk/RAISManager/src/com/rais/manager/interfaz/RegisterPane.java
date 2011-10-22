@@ -1,5 +1,8 @@
 package com.rais.manager.interfaz;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
@@ -20,6 +23,7 @@ import nextapp.echo.app.event.ActionListener;
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Register;
+import com.rais.manager.database.Estudiante;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -28,6 +32,10 @@ public class RegisterPane extends Panel {
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
 	private Desktop desktop;
+
+	private Estudiante student;
+
+	private String message = "";
 
 	private TextField txtAlias;
 	private TextField txtName;
@@ -44,8 +52,9 @@ public class RegisterPane extends Panel {
 	private Column col;
 	private Row errorRow;
 
-	public RegisterPane() {
+	public RegisterPane(Estudiante student) {
 
+		this.student = student;
 		desktop = app.getDesktop();
 		initGui();
 
@@ -81,6 +90,11 @@ public class RegisterPane extends Panel {
 		txtAlias = new TextField();
 		GUIStyles.setFont(txtAlias, GUIStyles.NORMAL);
 		txtAlias.setWidth(new Extent(300));
+		txtAlias.setMaximumLength(10);
+		txtAlias.setToolTipText( //
+				"Digite el nombre de usuario que utilizará para " +
+				"acceder al sistema. Este debe contener máximo 10 dígitos");
+		txtAlias.setText(student.getAlias());
 		grid.add(txtAlias);
 
 		Label lblName = new Label("Nombre y Apellido:");
@@ -90,6 +104,7 @@ public class RegisterPane extends Panel {
 		txtName = new TextField();
 		GUIStyles.setFont(txtName, GUIStyles.NORMAL);
 		txtName.setWidth(new Extent(300));
+		txtName.setText(student.getNombre());
 		grid.add(txtName);
 
 		Label lblCedula = new Label("Cédula:");
@@ -99,6 +114,8 @@ public class RegisterPane extends Panel {
 		txtCedula = new TextField();
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
 		txtCedula.setWidth(new Extent(300));
+		txtCedula.setMaximumLength(10);
+		txtCedula.setText(student.getCedula());
 		grid.add(txtCedula);
 
 		Label lblMail = new Label("Correo:");
@@ -108,6 +125,7 @@ public class RegisterPane extends Panel {
 		txtMail = new TextField();
 		GUIStyles.setFont(txtMail, GUIStyles.NORMAL);
 		txtMail.setWidth(new Extent(300));
+		txtMail.setText(student.getMail());
 		grid.add(txtMail);
 
 		Label lblCompany = new Label("Tipo de usuario:");
@@ -138,6 +156,10 @@ public class RegisterPane extends Panel {
 		fldPassword = new PasswordField();
 		GUIStyles.setFont(fldPassword, GUIStyles.NORMAL);
 		fldPassword.setWidth(new Extent(300));
+		fldPassword.setMaximumLength(12);
+		fldPassword.setToolTipText( //
+				"Digite la contraseña que utilizará para acceder al sistema. " + //
+				"Esta debe contener entre 6 y 12 dígitos");
 		grid.add(fldPassword);
 
 		Label lblConfirmPassword = new Label("Confirmar Contraseña:");
@@ -147,6 +169,9 @@ public class RegisterPane extends Panel {
 		fldConfirmPassword = new PasswordField();
 		GUIStyles.setFont(fldConfirmPassword, GUIStyles.NORMAL);
 		fldConfirmPassword.setWidth(new Extent(300));
+		fldConfirmPassword.setMaximumLength(12);
+		fldConfirmPassword.setToolTipText( //
+				"Confirme la contraseña digitada anteriormente");
 		grid.add(fldConfirmPassword);
 
 		col.add(grid);
@@ -160,7 +185,7 @@ public class RegisterPane extends Panel {
 		btnCancel.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evt) {
 				btnCancelClicked();
 			}
 		});
@@ -170,7 +195,7 @@ public class RegisterPane extends Panel {
 		btnNext.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evt) {
 				btnNextClicked();
 			}
 		});
@@ -211,43 +236,27 @@ public class RegisterPane extends Panel {
 			return;
 		}
 
-		if (!fldConfirmPassword.getText().equals(fldPassword.getText())) {
-
-			if (col.getComponentCount() > 3) {
-				col.remove(errorRow);
-			}
-
-			errorRow = new Row();
-			Label lblError = new Label("Por favor confirma tu contraseña");
-			GUIStyles.setFont(lblError, GUIStyles.ITALIC);
-			errorRow.add(lblError);
-			errorRow.setAlignment(Alignment.ALIGN_CENTER);
-			col.add(errorRow);
-
-			getFldPassword().set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
-			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
-
-			return;
-
-		}
-
 		if (checkEmptyFields()) {
 			return;
 		}
 
-		try {
+		if (!validateMail()) {
+			desktop.setWindowPaneEmergente("Formato de correo no válido");
+			return;
+		}
 
-			if (!Register.createUser(this)) {
-				return;
-			}
+		if (!validatePassword()) {
+			return;
+		}
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (!Register.createUser(this)) {
+			desktop.setWindowPaneEmergente(message);
+			return;
 		}
 
 		if (selUserType.getSelectedIndex() == 1) {
 
-			RegisterStudentPane pane = new RegisterStudentPane();
+			RegisterStudentPane pane = new RegisterStudentPane(student);
 			desktop.setCentralPanel(pane);
 
 		}
@@ -262,7 +271,54 @@ public class RegisterPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	public boolean checkEmptyFields() {
+	private boolean validateMail() {
+
+		Pattern pattern = Pattern.compile( //
+				"[a-zA-Z0-9]+[.[a-zA-Z0-9_-]+]*@[a-z0-9][\\w\\.-]" +
+				"*[a-z0-9]\\.[a-z][a-z\\.]*[a-z]$");
+		Matcher matcher = pattern.matcher(txtMail.getText());
+
+		return matcher.matches();
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private boolean validatePassword() {
+
+		if (fldPassword.getText().length() < 6) {
+			desktop.setWindowPaneEmergente( //
+					"La contraseña debe tener un mínimo de 6 dígitos");
+			return false;
+		}
+
+		if (!fldConfirmPassword.getText().equals(fldPassword.getText())) {
+
+			if (col.getComponentCount() > 4) {
+				col.remove(errorRow);
+			}
+
+			errorRow = new Row();
+			Label lblError = new Label("Por favor confirma tu contraseña");
+			GUIStyles.setFont(lblError, GUIStyles.ITALIC);
+			errorRow.add(lblError);
+			errorRow.setAlignment(Alignment.ALIGN_CENTER);
+			col.add(errorRow);
+
+			getFldPassword().set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+
+			return false;
+
+		}
+
+		return true;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private boolean checkEmptyFields() {
 
 		boolean flg = false;
 
@@ -273,6 +329,11 @@ public class RegisterPane extends Panel {
 
 		if (txtName.getText() == "") {
 			txtName.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			flg = true;
+		}
+
+		if (txtCedula.getText() == "") {
+			txtCedula.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
 			flg = true;
 		}
 
@@ -295,7 +356,7 @@ public class RegisterPane extends Panel {
 
 		if (flg) {
 
-			if (col.getComponentCount() > 3) {
+			if (col.getComponentCount() > 4) {
 				col.remove(errorRow);
 			}
 
@@ -312,6 +373,58 @@ public class RegisterPane extends Panel {
 
 		return false;
 
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public Estudiante getStudent() {
+		return student;
+	}
+
+	public void setStudent(Estudiante student) {
+		this.student = student;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public TextField getTxtAlias() {
+		return txtAlias;
+	}
+
+	public void setTxtAlias(TextField txtAlias) {
+		this.txtAlias = txtAlias;
+	}
+
+	public TextField getTxtName() {
+		return txtName;
+	}
+
+	public void setTxtName(TextField txtName) {
+		this.txtName = txtName;
+	}
+
+	public TextField getTxtCedula() {
+		return txtCedula;
+	}
+
+	public void setTxtCedula(TextField txtCedula) {
+		this.txtCedula = txtCedula;
+	}
+
+	public TextField getTxtMail() {
+		return txtMail;
+	}
+
+	public void setTxtMail(TextField txtMail) {
+		this.txtMail = txtMail;
+	}
+
+	public PasswordField getFldPassword() {
+		return fldPassword;
+	}
+
+	public void setFldPassword(PasswordField fldPassword) {
+		this.fldPassword = fldPassword;
 	}
 
 	// --------------------------------------------------------------------------------
@@ -334,44 +447,12 @@ public class RegisterPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	public TextField getTxtAlias() {
-		return txtAlias;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setTxtAlias(TextField txtAlias) {
-		this.txtAlias = txtAlias;
-	}
-
-	public TextField getTxtName() {
-		return txtName;
-	}
-
-	public void setTxtName(TextField txtName) {
-		this.txtName = txtName;
-	}
-
-	public TextField getTxtMail() {
-		return txtMail;
-	}
-
-	public void setTxtMail(TextField txtMail) {
-		this.txtMail = txtMail;
-	}
-
-	public PasswordField getFldPassword() {
-		return fldPassword;
-	}
-
-	public void setFldPassword(PasswordField fldPassword) {
-		this.fldPassword = fldPassword;
-	}
-
-	public TextField getTxtCedula() {
-		return txtCedula;
-	}
-
-	public void setTxtCedula(TextField txtCedula) {
-		this.txtCedula = txtCedula;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	// --------------------------------------------------------------------------------

@@ -16,7 +16,7 @@ public class RaisManagerApp extends ApplicationInstance {
 	public Window init() {
 
 		Window window = new Window();
-		window.setTitle("Sistema de Gestión RAIS");
+		window.setTitle("Sistema de GestiÃ³n RAIS");
 
 		desktop = new Desktop(DesktopType.INDEX);
 		contentPane = new ContentPane();
