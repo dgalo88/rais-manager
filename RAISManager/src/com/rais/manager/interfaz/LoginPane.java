@@ -19,6 +19,7 @@ import nextapp.echo.app.event.ActionListener;
 import com.rais.manager.Desktop.DesktopType;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Login;
+import com.rais.manager.database.Estudiante;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -83,7 +84,7 @@ public class LoginPane extends Panel {
 		btnEnter.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnEnter.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evt) {
 				btnEnterClicked();
 			}
 		});
@@ -93,7 +94,7 @@ public class LoginPane extends Panel {
 		btnRegister.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evt) {
 				btnRegisterClicked();
 			}
 		});
@@ -109,7 +110,7 @@ public class LoginPane extends Panel {
 
 	protected void btnRegisterClicked() {
 
-		RegisterPane pane = new RegisterPane();
+		RegisterPane pane = new RegisterPane(new Estudiante());
 		app.getDesktop().setCentralPanel(pane);
 
 	}
@@ -123,9 +124,8 @@ public class LoginPane extends Panel {
 					"Ingrese el nombre de usuario");
 			return;
 		}
-		if (fldPassword.getText().isEmpty()) {
-			app.getDesktop().setWindowPaneEmergente( //
-					"Ingrese la contraseña");
+
+		if (!validatePassword()) {
 			return;
 		}
 
@@ -136,6 +136,26 @@ public class LoginPane extends Panel {
 		}
 
 		app.setNewDesktop(DesktopType.MAIN);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private boolean validatePassword() {
+
+		if (fldPassword.getText().isEmpty()) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Ingrese la contraseña");
+			return false;
+		}
+
+		if (fldPassword.getText().length() < 6) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"La contraseña debe tener un mínimo de 6 dígitos");
+			return false;
+		}
+
+		return true;
 
 	}
 

@@ -17,6 +17,7 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.database.Estudiante;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -70,7 +71,7 @@ public class RegisterTeacherPane extends Panel {
 
 		mattersMenu = new String[3];
 		mattersMenu[0] = "Seleccione materia";
-		mattersMenu[1] = "Ingeniería de Software";
+		mattersMenu[1] = "Ingenierï¿½a de Software";
 		mattersMenu[2] = "Bases de Datos";
 
 		selectMatter = new SelectField(getMattersMenu());
@@ -92,7 +93,7 @@ public class RegisterTeacherPane extends Panel {
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
-		Button btnBack = new Button("Atrás");
+		Button btnBack = new Button("Atrï¿½s");
 		btnBack.setStyle(GUIStyles.DEFAULT_STYLE);
 		btnBack.addActionListener(new ActionListener() {
 			@Override
@@ -133,7 +134,7 @@ public class RegisterTeacherPane extends Panel {
 
 	private void btnBackClicked() {
 
-		RegisterPane pane = new RegisterPane();
+		RegisterPane pane = new RegisterPane(new Estudiante());
 		desktop.setCentralPanel(pane);
 
 	}

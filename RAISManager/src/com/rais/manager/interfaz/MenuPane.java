@@ -3,6 +3,7 @@ package com.rais.manager.interfaz;
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;
+import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.Row;
@@ -33,6 +34,7 @@ public class MenuPane extends Panel {
 		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
 
 		Column col = new Column();
+		col.setCellSpacing(new Extent(0));
 
 		Button btnHome = new Button("Inicio");
 		btnHome.setStyle(GUIStyles.DEFAULT_STYLE);
@@ -54,15 +56,15 @@ public class MenuPane extends Panel {
 		});
 		col.add(btnProfile);
 
-		Button btnSurveys = new Button("Encuestas");
-		btnSurveys.setStyle(GUIStyles.DEFAULT_STYLE);
-		btnSurveys.addActionListener(new ActionListener() {
+		Button btnPolls = new Button("Encuestas");
+		btnPolls.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnPolls.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnSurveysClicked();
+				btnPollsClicked();
 			}
 		});
-		col.add(btnSurveys);
+		col.add(btnPolls);
 
 		Button btnWorks = new Button("Tareas");
 		btnWorks.setStyle(GUIStyles.DEFAULT_STYLE);
@@ -93,7 +95,7 @@ public class MenuPane extends Panel {
 		app.setNewDesktop(DesktopType.MAIN);
 	}
 
-	private void btnSurveysClicked() {
+	private void btnPollsClicked() {
 
 		AutoCoEvaluationPane pane = new AutoCoEvaluationPane();
 		app.getDesktop().setCentralPanel(pane);

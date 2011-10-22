@@ -119,7 +119,7 @@ public class Desktop extends ContentPane {
 	private void setLabelTitle() {
 
 		hld = new HtmlLayoutData("title");
-		Label lblTitle = new Label("Sistema de Gestión RAIS");
+		Label lblTitle = new Label("Sistema de GestiÃ³n RAIS");
 		GUIStyles.setFont(lblTitle, GUIStyles.BOLD, 16);
 		lblTitle.setLayoutData(hld);
 		htmlLayout.add(lblTitle);

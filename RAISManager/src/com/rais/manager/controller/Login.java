@@ -24,8 +24,8 @@ public class Login {
 
 			Criteria criteria = session.createCriteria(Estudiante.class).add( //
 					Restrictions.and( //
-							Restrictions.eq("nick", pane.getTxtUser().getText()), //
-							Restrictions.eq("pass", pane.getFldPassword().getText())));
+							Restrictions.eq("alias", pane.getTxtUser().getText()), //
+							Restrictions.eq("password", pane.getFldPassword().getText())));
 
 			Estudiante user = (Estudiante) criteria.uniqueResult();
 
