@@ -1,5 +1,6 @@
 package com.rais.manager.controller;
 
+import java.security.MessageDigest;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -94,9 +95,43 @@ public class Register {
 		bean.setNombre(pane.getTxtName().getText());
 		bean.setCedula(pane.getTxtCedula().getText());
 		bean.setMail(pane.getTxtMail().getText());
-		bean.setPassword(pane.getFldPassword().getText());
+
+		try {
+			bean.setPassword(encrypt( //
+					pane.getFldPassword().getText()));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		session.saveOrUpdate(bean);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private static String encrypt(String password) //
+			throws IllegalStateException, Exception {
+
+		MessageDigest md = MessageDigest.getInstance("SHA");
+		byte[] b = md.digest(password.getBytes());
+
+		int size = b.length;
+		StringBuffer h = new StringBuffer(size);
+
+		for (int i = 0; i < size; i++) {
+
+			int u = b[i] & 255;
+
+			if (u < 16) {
+				h.append("0" + Integer.toHexString(u));
+			} else {
+				h.append(Integer.toHexString(u));
+			}
+
+		}
+		return h.toString();
 
 	}
 
