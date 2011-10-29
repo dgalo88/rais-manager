@@ -18,16 +18,16 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "t_encuesta")
+@Table(name = "t_poll")
 @Proxy(lazy = false)
-public class Encuesta {
+public class Poll {
 
 	private int id;
-	private Date fechaRecibida;
-	private Date fechaEnviada;
-	private List<EvalEstudiante> listaEvalEstudiante;
-	private Grupo grupoRef;
-	private Estudiante estudianteRef;
+	private Date receivedDate;
+	private Date sentDate;
+	private List<EvalStudent> evalStudentList;
+	private Group groupRef;
+	private Student studentRef;
 
 	// --------------------------------------------------------------------------------
 
@@ -43,58 +43,58 @@ public class Encuesta {
 
 	// --------------------------------------------------------------------------------
 
-	public void setFechaEnviada(Date fechaEnviada) {
-		this.fechaEnviada = fechaEnviada;
+	public void setSentDate(Date sentDate) {
+		this.sentDate = sentDate;
 	}
 
-	public Date getFechaEnviada() {
-		return fechaEnviada;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public void setFechaRecibida(Date fechaRecibida) {
-		this.fechaRecibida = fechaRecibida;
-	}
-
-	public Date getFechaRecibida() {
-		return fechaRecibida;
+	public Date getSentDate() {
+		return sentDate;
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public void setListaEvalEstudiante(List<EvalEstudiante> listaEvalEstudiante) {
-		this.listaEvalEstudiante = listaEvalEstudiante;
+	public void setReceivedDate(Date receivedDate) {
+		this.receivedDate = receivedDate;
+	}
+
+	public Date getReceivedDate() {
+		return receivedDate;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public void setEvalStudentList(List<EvalStudent> evalStudentList) {
+		this.evalStudentList = evalStudentList;
 	}
 
 	@SuppressWarnings("deprecation")
-	@OneToMany (mappedBy = "encuestaRef")
+	@OneToMany (mappedBy = "pollRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<EvalEstudiante> getListaEvalEstudiante() {
-		return listaEvalEstudiante;
+	public List<EvalStudent> getEvalStudentList() {
+		return evalStudentList;
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public void setGrupoRef(Grupo grupoRef) {
-		this.grupoRef = grupoRef;
+	public void setGroupRef(Group groupRef) {
+		this.groupRef = groupRef;
 	}
 
 	@ManyToOne
-	public Grupo getGrupoRef() {
-		return grupoRef;
+	public Group getGroupRef() {
+		return groupRef;
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public void setEstudianteRef(Estudiante estudianteRef) {
-		this.estudianteRef = estudianteRef;
+	public void setStudentRef(Student studentRef) {
+		this.studentRef = studentRef;
 	}
 
 	@ManyToOne
-	public Estudiante getEstudianteRef() {
-		return estudianteRef;
+	public Student getStudentRef() {
+		return studentRef;
 	}
 
 	// --------------------------------------------------------------------------------

@@ -10,13 +10,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "t_evalestudiante")
+@Table(name = "t_groupstudent")
 @Proxy(lazy = false)
-public class EvalEstudiante {
+public class GroupStudent {
 
 	private int id;
-	private Encuesta encuestaRef;
-	private Estudiante estudianteRef;
+	private Student studentRef;
+	private Group groupRef;
 
 	// --------------------------------------------------------------------------------
 
@@ -32,24 +32,24 @@ public class EvalEstudiante {
 
 	// --------------------------------------------------------------------------------
 
-	public void setEncuestaRef(Encuesta encuestaRef) {
-		this.encuestaRef = encuestaRef;
+	public void setStudentRef(Student studentRef) {
+		this.studentRef = studentRef;
 	}
 
 	@ManyToOne
-	public Encuesta getEncuestaRef() {
-		return encuestaRef;
+	public Student getStudentRef() {
+		return studentRef;
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public void setEstudianteRef(Estudiante estudianteRef) {
-		this.estudianteRef = estudianteRef;
+	public void setGroupRef(Group groupRef) {
+		this.groupRef = groupRef;
 	}
 
 	@ManyToOne
-	public Estudiante getEstudianteRef() {
-		return estudianteRef;
+	public Group getGroupRef() {
+		return groupRef;
 	}
 
 	// --------------------------------------------------------------------------------

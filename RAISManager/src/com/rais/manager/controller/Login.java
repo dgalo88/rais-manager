@@ -10,8 +10,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import com.rais.manager.database.Estudiante;
 import com.rais.manager.database.SessionHibernate;
+import com.rais.manager.database.User;
 import com.rais.manager.interfaz.LoginPane;
 
 public class Login {
@@ -27,7 +27,7 @@ public class Login {
 			Criteria criteria = null;
 			try {
 
-				criteria = session.createCriteria(Estudiante.class).add( //
+				criteria = session.createCriteria(User.class).add( //
 						Restrictions.and( //
 								Restrictions.eq("alias", pane.getTxtUser().getText()), //
 								Restrictions.eq("password", //
@@ -39,7 +39,8 @@ public class Login {
 				e.printStackTrace();
 			}
 
-			Estudiante user = (Estudiante) criteria.uniqueResult();
+			User user = (User) criteria.uniqueResult();
+			pane.getRaisManagerApp().setUser(user);
 
 			if (user == null) {
 				return false;
@@ -52,7 +53,7 @@ public class Login {
 				HttpSession httpSession = //
 						WebContainerServlet.getActiveConnection().getRequest().getSession();
 
-				System.err.println("login for user " + user.getNombre() + //
+				System.err.println("login for user " + user.getName() + //
 						" in http session " + httpSession.getId());
 
 			}

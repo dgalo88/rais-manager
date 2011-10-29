@@ -85,11 +85,12 @@
 
 		<!-- The mapping files -->
 
-		<mapping class="com.rais.manager.database.Encuesta" />
-		<mapping class="com.rais.manager.database.Estudiante" />
-		<mapping class="com.rais.manager.database.EvalEstudiante" />
-		<mapping class="com.rais.manager.database.Grupo" />
-		<mapping class="com.rais.manager.database.GrupoEstudiante" />
+		<mapping class="com.rais.manager.database.Poll" />
+		<mapping class="com.rais.manager.database.User" />
+		<mapping class="com.rais.manager.database.Student" />
+		<mapping class="com.rais.manager.database.EvalStudent" />
+		<mapping class="com.rais.manager.database.Group" />
+		<mapping class="com.rais.manager.database.GroupStudent" />
 
 	</session-factory>
 </hibernate-configuration>

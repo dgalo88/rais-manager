@@ -1,6 +1,7 @@
 package com.rais.manager;
 
 import com.rais.manager.Desktop.DesktopType;
+import com.rais.manager.database.User;
 
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.ContentPane;
@@ -9,6 +10,7 @@ import nextapp.echo.app.Window;
 @SuppressWarnings("serial")
 public class RaisManagerApp extends ApplicationInstance {
 
+	private User user;
 	private ContentPane contentPane;
 	private Desktop desktop;
 
@@ -26,6 +28,8 @@ public class RaisManagerApp extends ApplicationInstance {
 		return window;
 
 	}
+
+	// --------------------------------------------------------------------------------
 
 	public ContentPane getContentPane() {
 		return contentPane;
@@ -45,5 +49,17 @@ public class RaisManagerApp extends ApplicationInstance {
 		contentPane.add(desktop);
 
 	}
+
+	// --------------------------------------------------------------------------------
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	// --------------------------------------------------------------------------------
 
 }

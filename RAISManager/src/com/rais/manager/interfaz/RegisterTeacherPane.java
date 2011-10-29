@@ -17,7 +17,7 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
-import com.rais.manager.database.Estudiante;
+import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -44,12 +44,10 @@ public class RegisterTeacherPane extends Panel {
 
 	private void initGui() {
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		col = new Column();
 		col.setCellSpacing(new Extent(5));
@@ -93,8 +91,8 @@ public class RegisterTeacherPane extends Panel {
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
-		Button btnBack = new Button("Atr�s");
-		btnBack.setStyle(GUIStyles.DEFAULT_STYLE);
+		Button btnBack = new Button("Atrás");
+		btnBack.setStyle(GUIStyles.BUTTON_STYLE);
 		btnBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +102,7 @@ public class RegisterTeacherPane extends Panel {
 		rowButtons.add(btnBack);
 
 		Button btnRegister = new Button("Registrarse");
-		btnRegister.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnRegister.setStyle(GUIStyles.BUTTON_STYLE);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -134,7 +132,7 @@ public class RegisterTeacherPane extends Panel {
 
 	private void btnBackClicked() {
 
-		RegisterPane pane = new RegisterPane(new Estudiante());
+		RegisterPane pane = new RegisterPane(new User());
 		desktop.setCentralPanel(pane);
 
 	}
@@ -159,7 +157,7 @@ public class RegisterTeacherPane extends Panel {
 		boolean flg = false;
 
 		if (selectMatter.getSelectedIndex() == 0) {
-			selectMatter.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			selectMatter.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 

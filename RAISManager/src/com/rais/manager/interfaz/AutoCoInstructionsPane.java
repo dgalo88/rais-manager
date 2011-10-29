@@ -6,7 +6,6 @@ import nextapp.echo.app.Color;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.Grid;
-import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.Row;
@@ -18,12 +17,10 @@ public class AutoCoInstructionsPane extends Panel {
 
 	public AutoCoInstructionsPane() {
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		Column col = new Column();
 		col.setCellSpacing(new Extent(15));

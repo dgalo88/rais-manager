@@ -19,7 +19,7 @@ import nextapp.echo.app.event.ActionListener;
 import com.rais.manager.Desktop.DesktopType;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Login;
-import com.rais.manager.database.Estudiante;
+import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -37,12 +37,10 @@ public class LoginPane extends Panel {
 
 	private void initGui() {
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		Column col = new Column();
 		col.setCellSpacing(new Extent(5));
@@ -81,7 +79,7 @@ public class LoginPane extends Panel {
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button btnEnter = new Button("Entrar");
-		btnEnter.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnEnter.setStyle(GUIStyles.BUTTON_STYLE);
 		btnEnter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -91,7 +89,7 @@ public class LoginPane extends Panel {
 		rowButtons.add(btnEnter);
 
 		Button btnRegister = new Button("Registrarse");
-		btnRegister.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnRegister.setStyle(GUIStyles.BUTTON_STYLE);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -110,7 +108,7 @@ public class LoginPane extends Panel {
 
 	protected void btnRegisterClicked() {
 
-		RegisterPane pane = new RegisterPane(new Estudiante());
+		RegisterPane pane = new RegisterPane(new User());
 		app.getDesktop().setCentralPanel(pane);
 
 	}
@@ -175,6 +173,12 @@ public class LoginPane extends Panel {
 
 	public void setFldPassword(PasswordField fldPassword) {
 		this.fldPassword = fldPassword;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public RaisManagerApp getRaisManagerApp() {
+		return app;
 	}
 
 	// --------------------------------------------------------------------------------

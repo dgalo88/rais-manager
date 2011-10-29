@@ -6,17 +6,18 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
-import com.rais.manager.database.Estudiante;
+import com.rais.manager.database.Group;
 import com.rais.manager.database.SessionHibernate;
+import com.rais.manager.database.User;
 
 public class Polls {
 
 	// --------------------------------------------------------------------------------
 
 	@SuppressWarnings("unchecked")
-	public static List<String> loadPartnersData() {
+	public static List<String> loadPartnersData(User user) {
 
-		List<String> partnersList;
+		List<String> partnersList = new ArrayList<String>();
 
 		Session session = null;
 
@@ -25,12 +26,20 @@ public class Polls {
 			session = SessionHibernate.getInstance().getSession();
 			session.beginTransaction();
 
-			List<Estudiante> students = session.createCriteria( //
-					Estudiante.class).addOrder(Order.asc("nombre")).list();
+			Group group = user.getStudentRef().getGroupRef();
 
-			partnersList = new ArrayList<String>();
-			for (int i = 0; i < students.size(); i++) {
-				partnersList.add(students.get(i).getNombre());
+			List<User> userList = session.createCriteria( //
+					User.class).addOrder(Order.asc("name")).list();
+
+			for (int i = 0; i < userList.size(); i++) {
+
+				Group curr = userList.get(i).getStudentRef().getGroupRef();
+
+				if ((curr.getId() == group.getId()) //
+						&& (userList.get(i).getId() != user.getId())) {
+					partnersList.add(userList.get(i).getName());
+				}
+
 			}
 
 		} finally {

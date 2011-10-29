@@ -29,10 +29,10 @@ public class WindowInfo extends WindowPane {
 		setWidth(new Extent(300));
 		setHeight(new Extent(150));
 		setModal(true);
-		setStyle(GUIStyles.DEFAULT_STYLE);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 		setTitleFont(new Font(Font.MONOSPACE, Font.PLAIN, new Extent(14)));
 		GUIStyles.setFont(this, GUIStyles.NORMAL);
-		setTitleBackground(GUIStyles.COLORDEFAULT);
+		setTitleBackground(GUIStyles.COLOR_DEFAULT);
 		setBackground(Color.WHITE);
 		setBorder(new FillImageBorder(Color.BLACK, new Insets(2), new Insets(2)));
 
@@ -54,7 +54,7 @@ public class WindowInfo extends WindowPane {
 		row.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button aceptBtn = new Button("Aceptar");
-		aceptBtn.setStyle(GUIStyles.DEFAULT_STYLE);
+		aceptBtn.setStyle(GUIStyles.BUTTON_STYLE);
 		aceptBtn.setWidth(new Extent(90));
 		aceptBtn.addActionListener(new ActionListener() {
 			@Override

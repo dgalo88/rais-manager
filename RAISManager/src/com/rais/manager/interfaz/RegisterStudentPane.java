@@ -1,5 +1,7 @@
 package com.rais.manager.interfaz;
 
+import java.util.List;
+
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
@@ -20,7 +22,8 @@ import nextapp.echo.app.event.ActionListener;
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Register;
-import com.rais.manager.database.Estudiante;
+import com.rais.manager.database.Group;
+import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -30,7 +33,9 @@ public class RegisterStudentPane extends Panel {
 			RaisManagerApp.getActive();
 	private Desktop desktop;
 
-	private Estudiante student;
+	private User user;
+	private Group group;
+	private List<Group> groupList;
 
 	private SelectField companySelectField;
 	private String[] companyMenu;
@@ -41,9 +46,9 @@ public class RegisterStudentPane extends Panel {
 	private Column col;
 	private Row errorRow;
 
-	public RegisterStudentPane(Estudiante student) {
+	public RegisterStudentPane(User user) {
 
-		this.student = student;
+		this.user = user;
 		desktop = app.getDesktop();
 		initGui();
 
@@ -51,12 +56,10 @@ public class RegisterStudentPane extends Panel {
 
 	private void initGui() {
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		col = new Column();
 		col.setCellSpacing(new Extent(5));
@@ -77,7 +80,13 @@ public class RegisterStudentPane extends Panel {
 		grid.add(lblCompany);
 
 		// Cargar compañías
-		companyMenu = Register.loadCompaniesData();
+		groupList = Register.loadCompaniesData();
+
+		companyMenu = new String[groupList.size() + 1];
+		companyMenu[0] = "Seleccione su Compañía";
+		for (int i = 0; i < groupList.size(); i++) {
+			companyMenu[i + 1] = groupList.get(i).getName();
+		}
 
 		companySelectField = new SelectField(getCompanyMenu());
 		companySelectField.setHeight(new Extent(25));
@@ -102,17 +111,20 @@ public class RegisterStudentPane extends Panel {
 
 		buttonGroup = new ButtonGroup();
 
-		RadioButton isBtn = new RadioButton("Ingeniería de Software");
-		isBtn.setDisabledForeground(Color.LIGHTGRAY);
-		isBtn.setGroup(buttonGroup);
-		radioBtnRow.add(isBtn);
+		RadioButton ISBtn = new RadioButton("Ingeniería de Software");
+		GUIStyles.setFont(ISBtn, GUIStyles.NORMAL);
+		ISBtn.setDisabledForeground(Color.LIGHTGRAY);
+		ISBtn.setGroup(buttonGroup);
+		radioBtnRow.add(ISBtn);
 
-		RadioButton bdBtn = new RadioButton("Bases de Datos");
-		bdBtn.setDisabledForeground(Color.LIGHTGRAY);
-		bdBtn.setGroup(buttonGroup);
-		radioBtnRow.add(bdBtn);
+		RadioButton BDBtn = new RadioButton("Bases de Datos");
+		GUIStyles.setFont(BDBtn, GUIStyles.NORMAL);
+		BDBtn.setDisabledForeground(Color.LIGHTGRAY);
+		BDBtn.setGroup(buttonGroup);
+		radioBtnRow.add(BDBtn);
 
 		RadioButton bothBtn = new RadioButton("Ambas");
+		GUIStyles.setFont(bothBtn, GUIStyles.NORMAL);
 		bothBtn.setDisabledForeground(Color.LIGHTGRAY);
 		bothBtn.setGroup(buttonGroup);
 		radioBtnRow.add(bothBtn);
@@ -128,7 +140,7 @@ public class RegisterStudentPane extends Panel {
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button btnBack = new Button("Atrás");
-		btnBack.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnBack.setStyle(GUIStyles.BUTTON_STYLE);
 		btnBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -142,7 +154,7 @@ public class RegisterStudentPane extends Panel {
 		rowButtons.add(btnBack);
 
 		Button btnRegister = new Button("Registrarse");
-		btnRegister.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnRegister.setStyle(GUIStyles.BUTTON_STYLE);
 		btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -165,7 +177,9 @@ public class RegisterStudentPane extends Panel {
 			setDepartmentsEnable(false);
 			return;
 		}
+
 		setDepartmentsEnable(true);
+		group = groupList.get(selectedIndex - 1);
 
 	}
 
@@ -173,8 +187,8 @@ public class RegisterStudentPane extends Panel {
 
 	private void btnBackClicked() throws Exception {
 
-		RegisterPane pane = new RegisterPane(student);
-		desktop.setCentralPanel(pane);
+		RegisterPane panel = new RegisterPane(user);
+		desktop.setCentralPanel(panel);
 
 	}
 
@@ -182,12 +196,13 @@ public class RegisterStudentPane extends Panel {
 
 	private void btnRegisterClicked() {
 
-		if (!checkEmptyFields()) {
-
-			LoginPane pane = new LoginPane();
-			desktop.setCentralPanel(pane);
-
+		if (checkEmptyFields()) {
+			return;
 		}
+
+		Register.registerStudent(this);
+		LoginPane panel = new LoginPane();
+		desktop.setCentralPanel(panel);
 
 	}
 
@@ -198,11 +213,11 @@ public class RegisterStudentPane extends Panel {
 		boolean flg = false;
 
 		if (companySelectField.getSelectedIndex() == 0) {
-			companySelectField.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			companySelectField.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 		if (!isDepartmentSelected()) {
-			radioBtnRow.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			radioBtnRow.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 
@@ -264,6 +279,34 @@ public class RegisterStudentPane extends Panel {
 
 	public void setCompanyMenu(String [] companyMenu) {
 		this.companyMenu = companyMenu;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public List<Group> getGroupList() {
+		return groupList;
+	}
+
+	public void setGroupList(List<Group> groupList) {
+		this.groupList = groupList;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	// --------------------------------------------------------------------------------
