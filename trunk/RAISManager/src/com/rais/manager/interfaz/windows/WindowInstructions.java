@@ -25,14 +25,14 @@ public class WindowInstructions extends WindowPane {
 
 	private void initWindow(Panel pane) {
 
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 		setTitle("Instrucciones");
 		setWidth(new Extent(500));
 		setHeight(new Extent(400));
 		setModal(true);
-		setStyle(GUIStyles.DEFAULT_STYLE);
 		setTitleFont(new Font(Font.MONOSPACE, Font.PLAIN, new Extent(14)));
 		GUIStyles.setFont(this, GUIStyles.NORMAL);
-		setTitleBackground(GUIStyles.COLORDEFAULT);
+		setTitleBackground(GUIStyles.COLOR_DEFAULT);
 		setBackground(Color.WHITE);
 		setBorder(new FillImageBorder(Color.BLACK, new Insets(2), new Insets(2)));
 
@@ -52,7 +52,7 @@ public class WindowInstructions extends WindowPane {
 		row.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button aceptBtn = new Button("Aceptar");
-		aceptBtn.setStyle(GUIStyles.DEFAULT_STYLE);
+		aceptBtn.setStyle(GUIStyles.BUTTON_STYLE);
 		aceptBtn.setWidth(new Extent(90));
 		aceptBtn.addActionListener(new ActionListener() {
 			@Override

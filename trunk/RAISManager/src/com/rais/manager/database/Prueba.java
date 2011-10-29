@@ -8,21 +8,21 @@ public class Prueba {
 
 	public static void main(String[] args) {
 
-		Estudiante estudiante = new Estudiante();
-		estudiante.setCedula("19422959");
-		estudiante.setNombre("jesus");
+		User user = new User();
+		user.setCedula("19422959");
+		user.setName("jesus");
 
-		Date fecha = new Date();
-		fecha.setTime(56);
+		Date date = new Date();
+		date.setTime(56);
 
-		Encuesta encuesta1 = new Encuesta();
-		encuesta1.setFechaEnviada(fecha);
-		encuesta1.setEstudianteRef(estudiante);
+		Poll poll1 = new Poll();
+		poll1.setSentDate(date);
+		poll1.setStudentRef(user.getStudentRef());
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
-		session.save(estudiante);
-		session.save(encuesta1);
+		session.save(user);
+		session.save(poll1);
 		session.getTransaction().commit();
 		session.close();
 

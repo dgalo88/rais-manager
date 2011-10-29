@@ -8,11 +8,13 @@ import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Grid;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.RadioButton;
+import nextapp.echo.app.ResourceImageReference;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.TextArea;
 import nextapp.echo.app.button.ButtonGroup;
@@ -39,13 +41,15 @@ public class AutoCoEvaluationPane extends Panel {
 	private Row questions;
 
 	public AutoCoEvaluationPane() {
+		initGui();
+	}
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+	public void initGui() {
+
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		col = new Column();
 		col.setCellSpacing(new Extent(10));
@@ -56,15 +60,18 @@ public class AutoCoEvaluationPane extends Panel {
 
 		headerRow.add(Constructor.initTopRow("Cuestionario de Auto y Coevaluación", 14));
 
-		Button btnHelp = new Button("?");
+		Button btnHelp = new Button();
 		btnHelp.setToolTipText("Ver Instrucciones");
-		btnHelp.setStyle(GUIStyles.DEFAULT_STYLE);
-		btnHelp.setHeight(new Extent(15));
-		btnHelp.setWidth(new Extent(15));
+		btnHelp.setHeight(new Extent(20));
+		btnHelp.setWidth(new Extent(20));
+		btnHelp.setBackgroundImage(new FillImage( //
+				new ResourceImageReference("/com/rais/manager/images/button-help.png", //
+						new Extent(20), new Extent(20)), //
+						new Extent(0), new Extent(0), FillImage.NO_REPEAT));
 		btnHelp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnHelpClicked();
+				showWindowHelp();
 			}
 		});
 		headerRow.add(btnHelp);
@@ -77,7 +84,7 @@ public class AutoCoEvaluationPane extends Panel {
 		buttonRow.setAlignment(Alignment.ALIGN_CENTER);
 
 		btnNext = new Button("Siguiente");
-		btnNext.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -533,7 +540,7 @@ public class AutoCoEvaluationPane extends Panel {
 		grid.add(centerRow);
 
 		//Cargar Compañeros
-		partnersList = Polls.loadPartnersData();
+		partnersList = Polls.loadPartnersData(app.getUser());
 
 		for (int i = 0; i < partnersList.size(); i++) {
 
@@ -651,7 +658,7 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void btnHelpClicked() {
+	private void showWindowHelp() {
 
 		AutoCoInstructionsPane pane = new AutoCoInstructionsPane();
 		app.getDesktop().setInstructionWindow(pane);
@@ -672,7 +679,7 @@ public class AutoCoEvaluationPane extends Panel {
 		buttonRow.setAlignment(Alignment.ALIGN_CENTER);
 
 		btnNext = new Button("Siguiente");
-		btnNext.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -700,7 +707,7 @@ public class AutoCoEvaluationPane extends Panel {
 		buttonRow.setAlignment(Alignment.ALIGN_CENTER);
 
 		btnNext = new Button("Enviar");
-		btnNext.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {

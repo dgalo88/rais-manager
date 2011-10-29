@@ -1,6 +1,7 @@
 package com.rais.manager.controller;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -8,10 +9,13 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.rais.manager.database.Estudiante;
-import com.rais.manager.database.Grupo;
+import com.rais.manager.database.Group;
+import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.SessionHibernate;
+import com.rais.manager.database.Student;
+import com.rais.manager.database.User;
 import com.rais.manager.interfaz.RegisterPane;
+import com.rais.manager.interfaz.RegisterStudentPane;
 
 public class Register {
 
@@ -36,7 +40,7 @@ public class Register {
 				return false;
 			}
 
-			register(session, pane);
+			registerUser(session, pane);
 
 		} finally {
 
@@ -65,7 +69,7 @@ public class Register {
 			Session session, RegisterPane pane) {
 
 		Criteria criteria = session.createCriteria( //
-				Estudiante.class).add(Restrictions.eq( //
+				User.class).add(Restrictions.eq( //
 						"alias", pane.getTxtAlias().getText()));
 
 		return criteria.list().isEmpty();
@@ -78,7 +82,7 @@ public class Register {
 			Session session, RegisterPane pane) {
 
 		Criteria criteria = session.createCriteria( //
-				Estudiante.class).add(Restrictions.eq( //
+				User.class).add(Restrictions.eq( //
 						"cedula", pane.getTxtCedula().getText()));
 
 		return criteria.list().isEmpty();
@@ -87,12 +91,12 @@ public class Register {
 
 	// --------------------------------------------------------------------------------
 
-	private static void register(Session session, RegisterPane pane) {
+	private static void registerUser(Session session, RegisterPane pane) {
 
-		Estudiante bean = pane.getStudent();
+		User bean = pane.getUser();
 
 		bean.setAlias(pane.getTxtAlias().getText());
-		bean.setNombre(pane.getTxtName().getText());
+		bean.setName(pane.getTxtName().getText());
 		bean.setCedula(pane.getTxtCedula().getText());
 		bean.setMail(pane.getTxtMail().getText());
 
@@ -106,6 +110,71 @@ public class Register {
 		}
 
 		session.saveOrUpdate(bean);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void registerStudent(RegisterStudentPane panel) {
+
+		Session session = null;
+
+		try {
+
+			session = SessionHibernate.getInstance().getSession();
+			session.beginTransaction();
+
+			User user = panel.getUser();
+
+			Student student = new Student();
+			student.setUserRef(user);
+
+			session.saveOrUpdate(student);
+
+			Group group = panel.getGroup();
+
+			List<Student> studentList = new ArrayList<Student>();
+			studentList.add(student);
+			group.setStudentList(studentList);
+
+			session.saveOrUpdate(group);
+
+			GroupStudent groupStudent = new GroupStudent();
+			groupStudent.setGroupRef(group);
+			groupStudent.setStudentRef(student);
+
+			session.saveOrUpdate(groupStudent);
+
+			List<GroupStudent> groupStudentList = //
+					new ArrayList<GroupStudent>();
+			groupStudentList.add(groupStudent);
+
+//			student.setGroupStudentList(groupStudentList);
+
+			student.setGroupRef(group);
+
+			session.saveOrUpdate(student);
+
+			user.setStudentRef(student);
+			session.saveOrUpdate(user);
+
+		} finally {
+
+			// ----------------------------------------
+			// whatever happens, always close
+			// ----------------------------------------
+
+			if (session != null) {
+
+				if (session.getTransaction() != null) {
+					session.getTransaction().commit();
+				}
+
+				session.close();
+
+			}
+
+		}
 
 	}
 
@@ -138,9 +207,9 @@ public class Register {
 	// --------------------------------------------------------------------------------
 
 	@SuppressWarnings("unchecked")
-	public static String[] loadCompaniesData() {
+	public static List<Group> loadCompaniesData() {
 
-		String[] companyMenu;
+		List<Group> groupList;
 		Session session = null;
 
 		try {
@@ -148,14 +217,8 @@ public class Register {
 			session = SessionHibernate.getInstance().getSession();
 			session.beginTransaction();
 
-			List<Grupo> groups = session.createCriteria( //
-					Grupo.class).addOrder(Order.asc("id")).list();
-
-			companyMenu = new String[groups.size() + 1];
-			companyMenu[0] = "Seleccione su Compañía";
-			for (int i = 0; i < groups.size(); i++) {
-				companyMenu[i + 1] = groups.get(i).getNombre();
-			}
+			groupList = session.createCriteria( //
+					Group.class).addOrder(Order.asc("id")).list();
 
 		} finally {
 
@@ -174,7 +237,7 @@ public class Register {
 			}
 
 		}
-		return companyMenu;
+		return groupList;
 
 	}
 

@@ -23,7 +23,7 @@ import nextapp.echo.app.event.ActionListener;
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Register;
-import com.rais.manager.database.Estudiante;
+import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -33,7 +33,7 @@ public class RegisterPane extends Panel {
 			RaisManagerApp.getActive();
 	private Desktop desktop;
 
-	private Estudiante student;
+	private User user;
 
 	private String message = "";
 
@@ -52,9 +52,9 @@ public class RegisterPane extends Panel {
 	private Column col;
 	private Row errorRow;
 
-	public RegisterPane(Estudiante student) {
+	public RegisterPane(User user) {
 
-		this.student = student;
+		this.user = user;
 		desktop = app.getDesktop();
 		initGui();
 
@@ -62,12 +62,10 @@ public class RegisterPane extends Panel {
 
 	private void initGui() {
 
-		setInsets(new Insets(5, 5, 5, 5));
-		setAlignment(Alignment.ALIGN_CENTER);
+		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		col = new Column();
 		col.setCellSpacing(new Extent(5));
@@ -94,7 +92,7 @@ public class RegisterPane extends Panel {
 		txtAlias.setToolTipText( //
 				"Digite el nombre de usuario que utilizará para " +
 				"acceder al sistema. Este debe contener máximo 10 dígitos");
-		txtAlias.setText(student.getAlias());
+		txtAlias.setText(user.getAlias());
 		grid.add(txtAlias);
 
 		Label lblName = new Label("Nombre y Apellido:");
@@ -104,7 +102,7 @@ public class RegisterPane extends Panel {
 		txtName = new TextField();
 		GUIStyles.setFont(txtName, GUIStyles.NORMAL);
 		txtName.setWidth(new Extent(300));
-		txtName.setText(student.getNombre());
+		txtName.setText(user.getName());
 		grid.add(txtName);
 
 		Label lblCedula = new Label("Cédula:");
@@ -115,7 +113,7 @@ public class RegisterPane extends Panel {
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
 		txtCedula.setWidth(new Extent(300));
 		txtCedula.setMaximumLength(10);
-		txtCedula.setText(student.getCedula());
+		txtCedula.setText(user.getCedula());
 		grid.add(txtCedula);
 
 		Label lblMail = new Label("Correo:");
@@ -125,7 +123,7 @@ public class RegisterPane extends Panel {
 		txtMail = new TextField();
 		GUIStyles.setFont(txtMail, GUIStyles.NORMAL);
 		txtMail.setWidth(new Extent(300));
-		txtMail.setText(student.getMail());
+		txtMail.setText(user.getMail());
 		grid.add(txtMail);
 
 		Label lblCompany = new Label("Tipo de usuario:");
@@ -182,7 +180,7 @@ public class RegisterPane extends Panel {
 		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button btnCancel = new Button("Cancelar");
-		btnCancel.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnCancel.setStyle(GUIStyles.BUTTON_STYLE);
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -192,7 +190,7 @@ public class RegisterPane extends Panel {
 		rowButtons.add(btnCancel);
 
 		Button btnNext = new Button("Siguiente");
-		btnNext.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -256,7 +254,7 @@ public class RegisterPane extends Panel {
 
 		if (selUserType.getSelectedIndex() == 1) {
 
-			RegisterStudentPane pane = new RegisterStudentPane(student);
+			RegisterStudentPane pane = new RegisterStudentPane(user);
 			desktop.setCentralPanel(pane);
 
 		}
@@ -305,8 +303,8 @@ public class RegisterPane extends Panel {
 			errorRow.setAlignment(Alignment.ALIGN_CENTER);
 			col.add(errorRow);
 
-			getFldPassword().set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
-			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			getFldPassword().set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
+			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 
 			return false;
 
@@ -323,34 +321,34 @@ public class RegisterPane extends Panel {
 		boolean flg = false;
 
 		if (txtAlias.getText() == "") {
-			txtAlias.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			txtAlias.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 
 		if (txtName.getText() == "") {
-			txtName.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			txtName.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 
 		if (txtCedula.getText() == "") {
-			txtCedula.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			txtCedula.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 
 		if (txtMail.getText() == "") {
-			txtMail.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			txtMail.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 		if (selUserType.getSelectedIndex() == 0) {
-			selUserType.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			selUserType.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 		if (fldPassword.getText() == "") {
-			fldPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			fldPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 		if (fldConfirmPassword.getText() == "") {
-			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERRORCOLOR);
+			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
 
@@ -377,12 +375,12 @@ public class RegisterPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	public Estudiante getStudent() {
-		return student;
+	public User getUser() {
+		return user;
 	}
 
-	public void setStudent(Estudiante student) {
-		this.student = student;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	// --------------------------------------------------------------------------------

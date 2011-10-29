@@ -3,7 +3,6 @@ package com.rais.manager.interfaz;
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;
-import nextapp.echo.app.Extent;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.Row;
@@ -26,18 +25,14 @@ public class MenuPane extends Panel {
 
 	private void initGui() {
 
-		setInsets(new Insets(0, 10, 0, 0));
-		setAlignment(Alignment.ALIGN_LEFT);
-
 		Row row = new Row();
+		row.setInsets(new Insets(0, 10, 0, 0));
 		row.setAlignment(Alignment.ALIGN_LEFT);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
 
 		Column col = new Column();
-		col.setCellSpacing(new Extent(0));
 
 		Button btnHome = new Button("Inicio");
-		btnHome.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnHome.setStyle(GUIStyles.BUTTON_STYLE);
 		btnHome.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -47,7 +42,7 @@ public class MenuPane extends Panel {
 		col.add(btnHome);
 
 		Button btnProfile = new Button("Perfil");
-		btnProfile.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnProfile.setStyle(GUIStyles.BUTTON_STYLE);
 		btnProfile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -57,7 +52,7 @@ public class MenuPane extends Panel {
 		col.add(btnProfile);
 
 		Button btnPolls = new Button("Encuestas");
-		btnPolls.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnPolls.setStyle(GUIStyles.BUTTON_STYLE);
 		btnPolls.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -67,7 +62,7 @@ public class MenuPane extends Panel {
 		col.add(btnPolls);
 
 		Button btnWorks = new Button("Tareas");
-		btnWorks.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
 		btnWorks.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -77,7 +72,7 @@ public class MenuPane extends Panel {
 		col.add(btnWorks);
 
 		Button btnExit = new Button("Salir");
-		btnExit.setStyle(GUIStyles.DEFAULT_STYLE);
+		btnExit.setStyle(GUIStyles.BUTTON_STYLE);
 		btnExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -92,26 +87,38 @@ public class MenuPane extends Panel {
 	}
 
 	private void btnHomeClicked() {
-		app.setNewDesktop(DesktopType.MAIN);
+
+		MainPane panel = new MainPane();
+		app.getDesktop().setCentralPanel(panel);
+
 	}
 
 	private void btnPollsClicked() {
 
-		AutoCoEvaluationPane pane = new AutoCoEvaluationPane();
-		app.getDesktop().setCentralPanel(pane);
+		AutoCoEvaluationPane panel = new AutoCoEvaluationPane();
+		app.getDesktop().setCentralPanel(panel);
 
 	}
 
 	private void btnProfileClicked() {
-		
+
+		ProfilePane panel = new ProfilePane();
+		app.getDesktop().setCentralPanel(panel);
+
 	}
 
 	private void btnWorksClicked() {
-		// TODO Auto-generated method stub
+
+//		WorksPane panel = new WorksPane();
+//		app.getDesktop().setCentralPanel(panel);
+
 	}
 
 	private void btnExitClicked() {
+
+		app.setUser(null);
 		app.setNewDesktop(DesktopType.INDEX);
+
 	}
 
 }

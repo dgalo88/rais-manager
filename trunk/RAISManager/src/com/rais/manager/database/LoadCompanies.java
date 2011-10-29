@@ -6,17 +6,17 @@ public class LoadCompanies {
 
 	public static void main(String[] args) {
 
-		Grupo[] grupo = new Grupo [4];
-		for (int i = 0; i < grupo.length; i++) {
-			grupo[i] = new Grupo();
-			grupo[i].setNombre("Compañía " + Integer.toString(i));
+		Group[] group = new Group [3];
+		for (int i = 0; i < group.length; i++) {
+			group[i] = new Group();
+			group[i].setName("Compañía " + Integer.toString(i + 1));
 		}
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
-		for (int i = 0; i < grupo.length; i++) {
-			session.save(grupo[i]);
+		for (int i = 0; i < group.length; i++) {
+			session.save(group[i]);
 		}
 
 		session.getTransaction().commit();

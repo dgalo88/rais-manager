@@ -68,7 +68,7 @@ public class Desktop extends ContentPane {
 		htmlLayout.setBackground(new Color (255, 255, 255));
 		htmlLayout.setAlignment(Alignment.ALIGN_CENTER);
 
-		setLabelTitle();
+		setTitlePane();
 
 		hld = new HtmlLayoutData("content");
 		LoginPane login = new LoginPane();
@@ -96,7 +96,7 @@ public class Desktop extends ContentPane {
 		htmlLayout.setBackground(new Color (255, 255, 255));
 		htmlLayout.setAlignment(Alignment.ALIGN_CENTER);
 
-		setLabelTitle();
+		setTitlePane();
 
 		hld = new HtmlLayoutData("menu");
 		MenuPane menu = new MenuPane();
@@ -116,13 +116,20 @@ public class Desktop extends ContentPane {
 
 	// --------------------------------------------------------------------------------
 
-	private void setLabelTitle() {
+	private void setTitlePane() {
 
 		hld = new HtmlLayoutData("title");
+
+		Panel titlePane = new Panel();
+		titlePane.setInsets(new Insets(0, 10, 0, 10));
+		titlePane.setAlignment(Alignment.ALIGN_CENTER);
+
 		Label lblTitle = new Label("Sistema de Gestión RAIS");
 		GUIStyles.setFont(lblTitle, GUIStyles.BOLD, 16);
-		lblTitle.setLayoutData(hld);
-		htmlLayout.add(lblTitle);
+		titlePane.add(lblTitle);
+
+		titlePane.setLayoutData(hld);
+		htmlLayout.add(titlePane);
 
 	}
 

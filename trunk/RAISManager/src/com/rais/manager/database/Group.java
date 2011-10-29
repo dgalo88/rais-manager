@@ -16,15 +16,16 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "t_grupo")
+@Table(name = "t_group")
 @Proxy(lazy = false)
-public class Grupo {
+public class Group {
 
-	private String nombre;
+	private String name;
 	private byte[] logo;
 	private int id;
-	private List<Encuesta> listaEncuestas;
-	private List<GrupoEstudiante> listaGrupoEstudiante;
+	private List<Poll> pollList;
+	private List<Student> studentList;
+//	private List<GroupStudent> groupStudentList;
 
 	// --------------------------------------------------------------------------------
 
@@ -40,12 +41,12 @@ public class Grupo {
 
 	// --------------------------------------------------------------------------------
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
 
 	// --------------------------------------------------------------------------------
@@ -60,30 +61,42 @@ public class Grupo {
 
 	// --------------------------------------------------------------------------------
 
-	public void setListaEncuestas(List<Encuesta> listaEncuestas) {
-		this.listaEncuestas = listaEncuestas;
+	public void setPollList(List<Poll> pollList) {
+		this.pollList = pollList;
 	}
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "grupoRef")
+	@OneToMany(mappedBy = "groupRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<Encuesta> getListaEncuestas() {
-		return listaEncuestas;
+	public List<Poll> getPollList() {
+		return pollList;
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public void setListaGrupoEstudiante(List<GrupoEstudiante> listaGrupoEstudiante) {
-		this.listaGrupoEstudiante = listaGrupoEstudiante;
+//	public void setGroupStudentList(List<GroupStudent> groupStudentList) {
+//		this.groupStudentList = groupStudentList;
+//	}
+//
+//	@SuppressWarnings("deprecation")
+//	@OneToMany(mappedBy = "groupRef")
+//	@LazyCollection(LazyCollectionOption.TRUE)
+//	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
+//	public List<GroupStudent> getGroupStudentList() {
+//		return groupStudentList;
+//	}
+
+	public void setStudentList(List<Student> studentList) {
+		this.studentList = studentList;
 	}
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "grupoRef")
+	@OneToMany(mappedBy = "groupRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<GrupoEstudiante> getListaGrupoEstudiante() {
-		return listaGrupoEstudiante;
+	public List<Student> getStudentList() {
+		return studentList;
 	}
 
 	// --------------------------------------------------------------------------------
