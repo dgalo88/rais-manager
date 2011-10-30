@@ -1,5 +1,7 @@
 package com.rais.manager.interfaz;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import nextapp.echo.app.Alignment;
@@ -16,11 +18,11 @@ import nextapp.echo.app.Panel;
 import nextapp.echo.app.RadioButton;
 import nextapp.echo.app.ResourceImageReference;
 import nextapp.echo.app.Row;
-import nextapp.echo.app.TextArea;
 import nextapp.echo.app.button.ButtonGroup;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
+import com.csvreader.CsvWriter;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Polls;
 import com.rais.manager.styles.GUIStyles;
@@ -31,14 +33,22 @@ public class AutoCoEvaluationPane extends Panel {
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
 
+	private CsvWriter csv = new CsvWriter( //
+			"auto-co-evaluation.csv", ',', //
+			Charset.forName("UTF-8"));
+
+	private Label[] lblElement = new Label[5];
 	private List<String> partnersList;
+	private RadioButton[][] autoRadioBtn = new RadioButton[5][4];
+	private ButtonGroup[] autoBtnGroup = new ButtonGroup[5];
+	private ButtonGroup[] coBtnGroup;
+	private RadioButton[][] coRadioBtn;
 
 	private Column col;
 	private Row buttonRow;
 	private Button btnNext;
 	private Row autoEvaluation;
 	private Row coEvaluation;
-	private Row questions;
 
 	public AutoCoEvaluationPane() {
 		initGui();
@@ -88,7 +98,7 @@ public class AutoCoEvaluationPane extends Panel {
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnNext1Clicked();
+				btnNextClicked();
 			}
 		});
 		buttonRow.add(btnNext);
@@ -144,9 +154,9 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_CENTER);
 
-		Label lblElement = new Label("Elemento");
-		GUIStyles.setFont(lblElement, GUIStyles.BOLD, 12);
-		centerRow.add(lblElement);
+		Label lblElementHead = new Label("Elemento");
+		GUIStyles.setFont(lblElementHead, GUIStyles.BOLD, 12);
+		centerRow.add(lblElementHead);
 		grid.add(centerRow);
 
 		centerRow = new Row();
@@ -194,46 +204,26 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_1 = new Label("¿Cómo evalúa el producto desarrollado por su compañía? " +
+		lblElement[0] = new Label("¿Cómo evalúa el producto desarrollado por su compañía? " +
 				"\n(considere calidad del producto, logro de los objetivos, " +
 				"cantidad de funcionalidad implementada, etcétera)");
-		GUIStyles.setFont(lblElement1_1, GUIStyles.NORMAL, 12);
-		centerRow.add(lblElement1_1);
+		GUIStyles.setFont(lblElement[0], GUIStyles.NORMAL, 12);
+		centerRow.add(lblElement[0]);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+		autoBtnGroup[0] = new ButtonGroup();
 
-		RadioButton btnA1 = new RadioButton();
-		centerRow.add(btnA1);
-		grid.add(centerRow);
+		for (int j = 0; j < 4; j++) {
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			centerRow = new Row();
+			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			autoRadioBtn[0][j] = new RadioButton();
+			centerRow.add(autoRadioBtn[0][j]);
+			grid.add(centerRow);
 
-		RadioButton btnB1 = new RadioButton();
-		centerRow.add(btnB1);
-		grid.add(centerRow);
+			autoRadioBtn[0][j].setGroup(autoBtnGroup[0]);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnC1 = new RadioButton();
-		centerRow.add(btnC1);
-		grid.add(centerRow);
-
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnD1 = new RadioButton();
-		centerRow.add(btnD1);
-		grid.add(centerRow);
-
-		ButtonGroup btnGroup1 = new ButtonGroup();
-		btnA1.setGroup(btnGroup1);
-		btnB1.setGroup(btnGroup1);
-		btnC1.setGroup(btnGroup1);
-		btnD1.setGroup(btnGroup1);
+		}
 
 		//Row 2
 
@@ -248,45 +238,25 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_2 = new Label("¿Cómo evalúa el desempeño de su compañía? " +
-				"(considere el logro de objetivos, eficiencia, etcétera)");
-		GUIStyles.setFont(lblElement1_2, GUIStyles.NORMAL, 12);
-		centerRow.add(lblElement1_2);
+		lblElement[1] = new Label("¿Cómo evalúa el desempeño de su compañía? " +
+				"\n(considere el logro de objetivos, eficiencia, etcétera)");
+		GUIStyles.setFont(lblElement[1], GUIStyles.NORMAL, 12);
+		centerRow.add(lblElement[1]);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+		autoBtnGroup[1] = new ButtonGroup();
 
-		RadioButton btnA2 = new RadioButton();
-		centerRow.add(btnA2);
-		grid.add(centerRow);
+		for (int j = 0; j < 4; j++) {
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			centerRow = new Row();
+			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			autoRadioBtn[1][j] = new RadioButton();
+			centerRow.add(autoRadioBtn[1][j]);
+			grid.add(centerRow);
 
-		RadioButton btnB2 = new RadioButton();
-		centerRow.add(btnB2);
-		grid.add(centerRow);
+			autoRadioBtn[1][j].setGroup(autoBtnGroup[1]);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnC2 = new RadioButton();
-		centerRow.add(btnC2);
-		grid.add(centerRow);
-
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnD2 = new RadioButton();
-		centerRow.add(btnD2);
-		grid.add(centerRow);
-
-		ButtonGroup btnGroup2 = new ButtonGroup();
-		btnA2.setGroup(btnGroup2);
-		btnB2.setGroup(btnGroup2);
-		btnC2.setGroup(btnGroup2);
-		btnD2.setGroup(btnGroup2);
+		}
 
 		//Row 3
 
@@ -301,46 +271,26 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_3 = new Label("¿Cómo evalúa SU desempeño dentro de su compañía? " +
-				"(considere el logro de objetivos, eficiencia, " +
+		lblElement[2] = new Label("¿Cómo evalúa SU desempeño dentro de su compañía? " +
+				"\n(considere el logro de objetivos, eficiencia, " +
 				"participación, aportes, responsabilidad, etcétera)");
-		GUIStyles.setFont(lblElement1_3, GUIStyles.NORMAL, 12);
-		centerRow.add(lblElement1_3);
+		GUIStyles.setFont(lblElement[2], GUIStyles.NORMAL, 12);
+		centerRow.add(lblElement[2]);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+		autoBtnGroup[2] = new ButtonGroup();
 
-		RadioButton btnA3 = new RadioButton();
-		centerRow.add(btnA3);
-		grid.add(centerRow);
+		for (int j = 0; j < 4; j++) {
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			centerRow = new Row();
+			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			autoRadioBtn[2][j] = new RadioButton();
+			centerRow.add(autoRadioBtn[2][j]);
+			grid.add(centerRow);
 
-		RadioButton btnB3 = new RadioButton();
-		centerRow.add(btnB3);
-		grid.add(centerRow);
+			autoRadioBtn[2][j].setGroup(autoBtnGroup[2]);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnC3 = new RadioButton();
-		centerRow.add(btnC3);
-		grid.add(centerRow);
-
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnD3 = new RadioButton();
-		centerRow.add(btnD3);
-		grid.add(centerRow);
-
-		ButtonGroup btnGroup3 = new ButtonGroup();
-		btnA3.setGroup(btnGroup3);
-		btnB3.setGroup(btnGroup3);
-		btnC3.setGroup(btnGroup3);
-		btnD3.setGroup(btnGroup3);
+		}
 
 		//Row 4
 
@@ -355,47 +305,27 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_4 = new Label("¿Cómo evalúa de forma global el desempeño " +
+		lblElement[3] = new Label("¿Cómo evalúa de forma global el desempeño " +
 				"de sus compañeros en su compañía? " +
-				"(considere logro de objetivos, eficiencia, " +
+				"\n(considere logro de objetivos, eficiencia, " +
 				"participación, aportes, responsabilidad, etcétera)");
-		GUIStyles.setFont(lblElement1_4, GUIStyles.NORMAL, 12);
-		centerRow.add(lblElement1_4);
+		GUIStyles.setFont(lblElement[3], GUIStyles.NORMAL, 12);
+		centerRow.add(lblElement[3]);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+		autoBtnGroup[3] = new ButtonGroup();
 
-		RadioButton btnA4 = new RadioButton();
-		centerRow.add(btnA4);
-		grid.add(centerRow);
+		for (int j = 0; j < 4; j++) {
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			centerRow = new Row();
+			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			autoRadioBtn[3][j] = new RadioButton();
+			centerRow.add(autoRadioBtn[3][j]);
+			grid.add(centerRow);
 
-		RadioButton btnB4 = new RadioButton();
-		centerRow.add(btnB4);
-		grid.add(centerRow);
+			autoRadioBtn[3][j].setGroup(autoBtnGroup[3]);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnC4 = new RadioButton();
-		centerRow.add(btnC4);
-		grid.add(centerRow);
-
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnD4 = new RadioButton();
-		centerRow.add(btnD4);
-		grid.add(centerRow);
-
-		ButtonGroup btnGroup4 = new ButtonGroup();
-		btnA4.setGroup(btnGroup4);
-		btnB4.setGroup(btnGroup4);
-		btnC4.setGroup(btnGroup4);
-		btnD4.setGroup(btnGroup4);
+		}
 
 		//Row 5
 
@@ -410,45 +340,25 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_LEFT);
 
-		Label lblElement1_5 = new Label("¿Cuál considera que fue su dedicación " +
+		lblElement[4] = new Label("¿Cuál considera que fue su dedicación " +
 				"de tiempo al desarrollo del producto?");
-		GUIStyles.setFont(lblElement1_5, GUIStyles.NORMAL, 12);
-		centerRow.add(lblElement1_5);
+		GUIStyles.setFont(lblElement[4], GUIStyles.NORMAL, 12);
+		centerRow.add(lblElement[4]);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+		autoBtnGroup[4] = new ButtonGroup();
 
-		RadioButton btnA5 = new RadioButton();
-		centerRow.add(btnA5);
-		grid.add(centerRow);
+		for (int j = 0; j < 4; j++) {
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			centerRow = new Row();
+			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			autoRadioBtn[4][j] = new RadioButton();
+			centerRow.add(autoRadioBtn[4][j]);
+			grid.add(centerRow);
 
-		RadioButton btnB5 = new RadioButton();
-		centerRow.add(btnB5);
-		grid.add(centerRow);
+			autoRadioBtn[4][j].setGroup(autoBtnGroup[4]);
 
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnC5 = new RadioButton();
-		centerRow.add(btnC5);
-		grid.add(centerRow);
-
-		centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-		RadioButton btnD5 = new RadioButton();
-		centerRow.add(btnD5);
-		grid.add(centerRow);
-
-		ButtonGroup btnGroup5 = new ButtonGroup();
-		btnA5.setGroup(btnGroup5);
-		btnB5.setGroup(btnGroup5);
-		btnC5.setGroup(btnGroup5);
-		btnD5.setGroup(btnGroup5);
+		}
 
 		centerRow = new Row();
 		centerRow.setAlignment(Alignment.ALIGN_CENTER);
@@ -542,6 +452,9 @@ public class AutoCoEvaluationPane extends Panel {
 		//Cargar Compañeros
 		partnersList = Polls.loadPartnersData(app.getUser());
 
+		coBtnGroup = new ButtonGroup[partnersList.size()];
+		coRadioBtn = new RadioButton[partnersList.size()][4];
+
 		for (int i = 0; i < partnersList.size(); i++) {
 
 			centerRow = new Row();
@@ -552,39 +465,19 @@ public class AutoCoEvaluationPane extends Panel {
 			centerRow.add(lblPartner);
 			grid.add(centerRow);
 
-			centerRow = new Row();
-			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+			coBtnGroup[i] = new ButtonGroup();
 
-			RadioButton btnA = new RadioButton();
-			centerRow.add(btnA);
-			grid.add(centerRow);
+			for (int j = 0; j < 4; j++) {
 
-			centerRow = new Row();
-			centerRow.setAlignment(Alignment.ALIGN_CENTER);
+				centerRow = new Row();
+				centerRow.setAlignment(Alignment.ALIGN_CENTER);
+				coRadioBtn[i][j] = new RadioButton();
+				centerRow.add(coRadioBtn[i][j]);
+				grid.add(centerRow);
 
-			RadioButton btnB = new RadioButton();
-			centerRow.add(btnB);
-			grid.add(centerRow);
+				coRadioBtn[i][j].setGroup(coBtnGroup[i]);
 
-			centerRow = new Row();
-			centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-			RadioButton btnC = new RadioButton();
-			centerRow.add(btnC);
-			grid.add(centerRow);
-
-			centerRow = new Row();
-			centerRow.setAlignment(Alignment.ALIGN_CENTER);
-
-			RadioButton btnD = new RadioButton();
-			centerRow.add(btnD);
-			grid.add(centerRow);
-
-			ButtonGroup btnGroup = new ButtonGroup();
-			btnA.setGroup(btnGroup);
-			btnB.setGroup(btnGroup);
-			btnC.setGroup(btnGroup);
-			btnD.setGroup(btnGroup);
+			}
 
 		}
 
@@ -601,58 +494,18 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private Row questions() {
+	@SuppressWarnings("unused")
+	private boolean checkOptionSelected(ButtonGroup buttonGroup) {
 
-		int widthPercent = 100;
-		int height = 100;
+		RadioButton[] buttons = buttonGroup.getButtons();
 
-		Row row = new Row();
-		row.setAlignment(Alignment.ALIGN_CENTER);
-		GUIStyles.setFont(row, GUIStyles.NORMAL, 12);
+		for (int i = 0; i < buttons.length; i++) {
+			if (buttons[i].isSelected()) {
+				return true;
+			}
+		}
 
-		Column col = new Column();
-		col.setCellSpacing(new Extent(15));
-
-		Label lblQuestion1 = new Label("3. ¿Considera que el desempeño del gerente " +
-				"de la compañía ha sido adecuado? " +
-				"Si la respuesta es negativa, explique de forma breve " +
-				"la razón y proponga un nuevo gerente.");
-		GUIStyles.setFont(lblQuestion1, GUIStyles.NORMAL);
-		col.add(lblQuestion1);
-
-		TextArea txtAnswer1 = new TextArea();
-		GUIStyles.setFont(txtAnswer1, GUIStyles.NORMAL);
-		txtAnswer1.setWidth(new Extent(widthPercent, Extent.PERCENT));
-		txtAnswer1.setHeight(new Extent(height));
-		col.add(txtAnswer1);
-
-		Label lblQuestion2 = new Label("4. ¿Considera que el desempeño del director " +
-				"de la compañía ha sido adecuado? Si la respuesta es negativa, " +
-				"explique de forma breve la razón y proponga un nuevo director.");
-		GUIStyles.setFont(lblQuestion2, GUIStyles.NORMAL);
-		col.add(lblQuestion2);
-
-		TextArea txtAnswer2 = new TextArea();
-		GUIStyles.setFont(txtAnswer2, GUIStyles.NORMAL);
-		txtAnswer2.setWidth(new Extent(widthPercent, Extent.PERCENT));
-		txtAnswer2.setHeight(new Extent(height));
-		col.add(txtAnswer2);
-
-		Label lblQuestion3 = new Label("5. Si pudiera retroceder en el tiempo " +
-				"y cambiar algo en relación al desarrollo del producto, " +
-				"la interacción con sus compañeros, su participación " +
-				"en el curso/producto, etcétera, ¿Qué sería?");
-		GUIStyles.setFont(lblQuestion3, GUIStyles.NORMAL);
-		col.add(lblQuestion3);
-
-		TextArea txtAnswer3 = new TextArea();
-		GUIStyles.setFont(txtAnswer3, GUIStyles.NORMAL);
-		txtAnswer3.setWidth(new Extent(widthPercent, Extent.PERCENT));
-		txtAnswer3.setHeight(new Extent(height));
-		col.add(txtAnswer3);
-
-		row.add(col);
-		return row;
+		return false;
 
 	}
 
@@ -667,7 +520,15 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void btnNext1Clicked() {
+	private void btnNextClicked() {
+
+		//TODO
+
+		try {
+			Polls.exportAutoEvaluation(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		col.remove(buttonRow);
 		col.remove(autoEvaluation);
@@ -678,40 +539,12 @@ public class AutoCoEvaluationPane extends Panel {
 		buttonRow = new Row();
 		buttonRow.setAlignment(Alignment.ALIGN_CENTER);
 
-		btnNext = new Button("Siguiente");
-		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
-		btnNext.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-//				btnNext2Clicked();
-				sendPoll();
-			}
-		});
-		buttonRow.add(btnNext);
-		col.add(buttonRow);
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	@SuppressWarnings("unused")
-	private void btnNext2Clicked() {
-
-		col.remove(buttonRow);
-		col.remove(coEvaluation);
-
-		questions = questions();
-		col.add(questions);
-
-		buttonRow = new Row();
-		buttonRow.setAlignment(Alignment.ALIGN_CENTER);
-
 		btnNext = new Button("Enviar");
 		btnNext.setStyle(GUIStyles.BUTTON_STYLE);
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				sendPoll();
+				btnSendClicked();
 			}
 		});
 		buttonRow.add(btnNext);
@@ -721,12 +554,37 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void sendPoll() {
+	private void btnSendClicked() {
 
-		//TODO
+		try {
+			Polls.exportCoEvaluation(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		MainPane pane = new MainPane();
 		app.getDesktop().setCentralPanel(pane);
 
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public CsvWriter getCsv() {
+		return csv;
+	}
+
+	public void setCsv(CsvWriter csv) {
+		this.csv = csv;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public Label[] getLblElement() {
+		return lblElement;
+	}
+
+	public void setLblElement1(Label[] lblElement) {
+		this.lblElement = lblElement;
 	}
 
 	// --------------------------------------------------------------------------------
@@ -737,6 +595,42 @@ public class AutoCoEvaluationPane extends Panel {
 
 	public void setPartnersList(List<String> partnersList) {
 		this.partnersList = partnersList;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public ButtonGroup[] getBtnGroupAuto() {
+		return autoBtnGroup;
+	}
+
+	public void setBtnGroupAuto(ButtonGroup[] btnGroupAuto) {
+		this.autoBtnGroup = btnGroupAuto;
+	}
+
+	public ButtonGroup[] getBtnGroupCo() {
+		return coBtnGroup;
+	}
+
+	public void setBtnGroupCo(ButtonGroup[] btnGroupCo) {
+		this.coBtnGroup = btnGroupCo;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public RadioButton[][] getCoRadioBtn() {
+		return coRadioBtn;
+	}
+
+	public void setCoRadioBtn(RadioButton[][] coRadioBtn) {
+		this.coRadioBtn = coRadioBtn;
+	}
+
+	public RadioButton[][] getAutoRadioBtn() {
+		return autoRadioBtn;
+	}
+
+	public void setAutoRadioBtn(RadioButton[][] autoRadioBtn) {
+		this.autoRadioBtn = autoRadioBtn;
 	}
 
 	// --------------------------------------------------------------------------------

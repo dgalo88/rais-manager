@@ -10,9 +10,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "t_evalstudent")
+@Table(name = "t_pollstudent")
 @Proxy(lazy = false)
-public class EvalStudent {
+public class PollStudent {
 
 	private int id;
 	private Poll pollRef;

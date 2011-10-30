@@ -6,19 +6,25 @@ import java.util.regex.Pattern;
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
+import nextapp.echo.app.CheckBox;
 import nextapp.echo.app.Color;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Grid;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.PasswordField;
+import nextapp.echo.app.ResourceImageReference;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.SelectField;
 import nextapp.echo.app.TextField;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import org.informagen.echo.app.IntegerTextField;
+import org.informagen.echo.app.SimpleCaptcha;
 
 import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
@@ -39,10 +45,12 @@ public class RegisterPane extends Panel {
 
 	private TextField txtAlias;
 	private TextField txtName;
-	private TextField txtCedula;
+	private IntegerTextField txtCedula;
 	private TextField txtMail;
 	private PasswordField fldPassword;
 	private PasswordField fldConfirmPassword;
+	private SimpleCaptcha captcha;
+	private TextField txtCaptcha;
 
 	private String userType;
 	private SelectField selUserType;
@@ -109,10 +117,11 @@ public class RegisterPane extends Panel {
 		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL);
 		grid.add(lblCedula);
 
-		txtCedula = new TextField();
+		txtCedula = new IntegerTextField();
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
-		txtCedula.setWidth(new Extent(300));
-		txtCedula.setMaximumLength(10);
+		txtCedula.setWidth(new Extent(280));
+		txtCedula.setMaximumLength(8);
+		txtCedula.setMinimumValue(0);
 		txtCedula.setText(user.getCedula());
 		grid.add(txtCedula);
 
@@ -174,6 +183,87 @@ public class RegisterPane extends Panel {
 
 		col.add(grid);
 
+		Grid gridCaptcha = new Grid(3);
+		gridCaptcha.setBackground(Color.WHITE);
+		gridCaptcha.setColumnWidth(0, new Extent(50, Extent.PERCENT));
+		gridCaptcha.setColumnWidth(1, new Extent(50, Extent.PERCENT));
+		gridCaptcha.setInsets(new Insets(5, 5, 5, 5));
+		gridCaptcha.setBorder(new Border( //
+				new Extent(0), Color.BLACK, Border.STYLE_INSET));
+
+		Column colCaptcha = new Column();
+
+		Row rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		captcha = new SimpleCaptcha();
+		captcha.nextString();
+		rowCaptcha.add(captcha);
+		colCaptcha.add(rowCaptcha);
+
+		rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		CheckBox checkCaptcha = new CheckBox("Usar imágenes");
+		GUIStyles.setFont(checkCaptcha, GUIStyles.NORMAL, 10);
+		checkCaptcha.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				captcha.setUseImages(!captcha.getUseImages());
+			}
+		});
+		rowCaptcha.add(checkCaptcha);
+		colCaptcha.add(rowCaptcha);
+		gridCaptcha.add(colCaptcha);
+
+		rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		colCaptcha = new Column();
+
+		Label lblCaptcha = new Label("Ingrese el código");
+		GUIStyles.setFont(lblCaptcha, GUIStyles.ITALIC, 10);
+		rowCaptcha.add(lblCaptcha);
+		colCaptcha.add(rowCaptcha);
+
+		rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		txtCaptcha = new TextField();
+		GUIStyles.setFont(txtCaptcha, GUIStyles.ITALIC);
+		txtCaptcha.setWidth(new Extent(80));
+		rowCaptcha.add(txtCaptcha);
+		colCaptcha.add(rowCaptcha);
+
+		gridCaptcha.add(colCaptcha);
+
+		rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		Button btnReload = new Button();
+		btnReload.setToolTipText("Obtener nuevo código");
+		btnReload.setHeight(new Extent(20));
+		btnReload.setWidth(new Extent(20));
+		btnReload.setBackgroundImage(new FillImage( //
+				new ResourceImageReference( //
+						"/com/rais/manager/images/button-reload.png", //
+						new Extent(20), new Extent(20)), //
+						new Extent(0), new Extent(0), FillImage.NO_REPEAT));
+		btnReload.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				btnReloadClicked();
+			}
+		});
+		rowCaptcha.add(btnReload);
+		gridCaptcha.add(rowCaptcha);
+
+		rowCaptcha = new Row();
+		rowCaptcha.setAlignment(Alignment.ALIGN_CENTER);
+
+		rowCaptcha.add(gridCaptcha);
+		col.add(rowCaptcha);
+
 		Row rowButtons = new Row();
 		rowButtons.setCellSpacing(new Extent(5));
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
@@ -200,6 +290,7 @@ public class RegisterPane extends Panel {
 		rowButtons.add(btnNext);
 
 		col.add(rowButtons);
+
 		row.add(col);
 		add(row);
 
@@ -233,18 +324,22 @@ public class RegisterPane extends Panel {
 			desktop.setWindowPaneEmergente("Escoge un nombre de usuario");
 			return;
 		}
-
 		if (checkEmptyFields()) {
 			return;
 		}
-
 		if (!validateMail()) {
 			desktop.setWindowPaneEmergente("Formato de correo no válido");
 			return;
 		}
-
 		if (!validatePassword()) {
 			return;
+		}
+		if (!captcha.getString().equals(txtCaptcha.getText())) {
+
+			desktop.setWindowPaneEmergente("Código de validación incorrecto");
+			btnReloadClicked();
+			return;
+
 		}
 
 		if (!Register.createUser(this)) {
@@ -265,6 +360,13 @@ public class RegisterPane extends Panel {
 
 		}
 
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private void btnReloadClicked() {
+		captcha.nextString();
+		txtCaptcha.setText("");
 	}
 
 	// --------------------------------------------------------------------------------
@@ -351,10 +453,14 @@ public class RegisterPane extends Panel {
 			fldConfirmPassword.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
 			flg = true;
 		}
+		if (txtCaptcha.getText() == "") {
+			txtCaptcha.set(PROPERTY_BACKGROUND, GUIStyles.ERROR_COLOR);
+			flg = true;
+		}
 
 		if (flg) {
 
-			if (col.getComponentCount() > 4) {
+			if (col.getComponentCount() > 5) {
 				col.remove(errorRow);
 			}
 
@@ -401,11 +507,11 @@ public class RegisterPane extends Panel {
 		this.txtName = txtName;
 	}
 
-	public TextField getTxtCedula() {
+	public IntegerTextField getTxtCedula() {
 		return txtCedula;
 	}
 
-	public void setTxtCedula(TextField txtCedula) {
+	public void setTxtCedula(IntegerTextField txtCedula) {
 		this.txtCedula = txtCedula;
 	}
 
@@ -423,6 +529,22 @@ public class RegisterPane extends Panel {
 
 	public void setFldPassword(PasswordField fldPassword) {
 		this.fldPassword = fldPassword;
+	}
+
+	public SimpleCaptcha getCaptcha() {
+		return captcha;
+	}
+
+	public void setCaptcha(SimpleCaptcha captcha) {
+		this.captcha = captcha;
+	}
+
+	public TextField getTxtCaptcha() {
+		return txtCaptcha;
+	}
+
+	public void setTxtCaptcha(TextField txtCaptcha) {
+		this.txtCaptcha = txtCaptcha;
 	}
 
 	// --------------------------------------------------------------------------------

@@ -73,7 +73,7 @@ public class RegisterStudentPane extends Panel {
 				new Extent(1), Color.BLACK, Border.STYLE_INSET));
 
 		col.add(Constructor.initTopRow("Registro de Usuario", 14));
-		col.add(Constructor.initTopRow("Datos Personales:", 13));
+		col.add(Constructor.initTopRow("Seleccinar Compañía:", 13));
 
 		Label lblCompany = new Label("Seleccione su Compañía:");
 		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL);

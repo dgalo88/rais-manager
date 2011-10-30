@@ -31,7 +31,7 @@ public class Login {
 						Restrictions.and( //
 								Restrictions.eq("alias", pane.getTxtUser().getText()), //
 								Restrictions.eq("password", //
-										encrypt(pane.getFldPassword().getText()))));
+										decrypt(pane.getFldPassword().getText()))));
 
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -79,7 +79,7 @@ public class Login {
 
 	// --------------------------------------------------------------------------------
 
-	private static String encrypt(String password) //
+	private static String decrypt(String password) //
 			throws IllegalStateException, Exception {
 
 		MessageDigest md = MessageDigest.getInstance("SHA");
