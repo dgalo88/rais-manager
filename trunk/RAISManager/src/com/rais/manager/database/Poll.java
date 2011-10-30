@@ -25,7 +25,7 @@ public class Poll {
 	private int id;
 	private Date receivedDate;
 	private Date sentDate;
-	private List<EvalStudent> evalStudentList;
+	private List<PollStudent> pollStudentList;
 	private Group groupRef;
 	private Student studentRef;
 
@@ -63,16 +63,16 @@ public class Poll {
 
 	// --------------------------------------------------------------------------------
 
-	public void setEvalStudentList(List<EvalStudent> evalStudentList) {
-		this.evalStudentList = evalStudentList;
+	public void setPollStudentList(List<PollStudent> pollStudentList) {
+		this.pollStudentList = pollStudentList;
 	}
 
 	@SuppressWarnings("deprecation")
 	@OneToMany (mappedBy = "pollRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<EvalStudent> getEvalStudentList() {
-		return evalStudentList;
+	public List<PollStudent> getPollStudentList() {
+		return pollStudentList;
 	}
 
 	// --------------------------------------------------------------------------------

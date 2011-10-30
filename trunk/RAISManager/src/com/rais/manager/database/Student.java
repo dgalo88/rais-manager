@@ -25,7 +25,7 @@ public class Student {
 	private int id;
 	private User userRef;
 	private Group groupRef;
-	private List<EvalStudent> evalStudentList;
+	private List<PollStudent> pollStudentList;
 	private List<Poll> pollList;
 //	private List<GroupStudent> groupStudentList;
 
@@ -65,16 +65,16 @@ public class Student {
 
 	// --------------------------------------------------------------------------------
 
-	public void setEvalStudentList(List<EvalStudent> evalStudentList) {
-		this.evalStudentList = evalStudentList;
+	public void setPollStudentList(List<PollStudent> pollStudentList) {
+		this.pollStudentList = pollStudentList;
 	}
 
 	@SuppressWarnings("deprecation")
 	@OneToMany(mappedBy = "studentRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<EvalStudent> getEvalStudentList() {
-		return evalStudentList;
+	public List<PollStudent> getPollStudentList() {
+		return pollStudentList;
 	}
 
 	// --------------------------------------------------------------------------------

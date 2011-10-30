@@ -85,10 +85,10 @@
 
 		<!-- The mapping files -->
 
-		<mapping class="com.rais.manager.database.Poll" />
 		<mapping class="com.rais.manager.database.User" />
 		<mapping class="com.rais.manager.database.Student" />
-		<mapping class="com.rais.manager.database.EvalStudent" />
+		<mapping class="com.rais.manager.database.Poll" />
+		<mapping class="com.rais.manager.database.PollStudent" />
 		<mapping class="com.rais.manager.database.Group" />
 		<mapping class="com.rais.manager.database.GroupStudent" />
 
