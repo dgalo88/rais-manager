@@ -21,6 +21,12 @@ public class Register {
 
 	// --------------------------------------------------------------------------------
 
+	private Register() {
+		/* empty */
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public static boolean createUser(RegisterPane pane) {
 
 		Session session = null;
@@ -95,11 +101,8 @@ public class Register {
 
 		User bean = pane.getUser();
 
-		bean.setAlias(pane.getTxtAlias().getText());
 		bean.setName(pane.getTxtName().getText());
 		bean.setCedula(pane.getTxtCedula().getText());
-		bean.setMail(pane.getTxtMail().getText());
-
 		try {
 			bean.setPassword(encrypt( //
 					pane.getFldPassword().getText()));
@@ -128,34 +131,30 @@ public class Register {
 
 			Student student = new Student();
 			student.setUserRef(user);
-
 			session.saveOrUpdate(student);
 
 			Group group = panel.getGroup();
 
-			List<Student> studentList = new ArrayList<Student>();
-			studentList.add(student);
-			group.setStudentList(studentList);
-
-			session.saveOrUpdate(group);
-
 			GroupStudent groupStudent = new GroupStudent();
-			groupStudent.setGroupRef(group);
 			groupStudent.setStudentRef(student);
-
+			groupStudent.setGroupRef(group);
 			session.saveOrUpdate(groupStudent);
 
-			List<GroupStudent> groupStudentList = //
-					new ArrayList<GroupStudent>();
+			List<GroupStudent> groupStudentList;
+			if (student.getGroupStudentList().isEmpty()) {
+				groupStudentList = new ArrayList<GroupStudent>();
+			} else {
+				groupStudentList = student.getGroupStudentList();
+			}
 			groupStudentList.add(groupStudent);
+			group.setGroupStudentList(groupStudentList);
+			student.setGroupStudentList(groupStudentList);
 
-//			student.setGroupStudentList(groupStudentList);
-
-			student.setGroupRef(group);
-
+			session.saveOrUpdate(group);
 			session.saveOrUpdate(student);
 
 			user.setStudentRef(student);
+			user.setTeacherRef(null);
 			session.saveOrUpdate(user);
 
 		} finally {

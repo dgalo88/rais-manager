@@ -51,16 +51,6 @@ public class MenuPane extends Panel {
 		});
 		col.add(btnProfile);
 
-		Button btnPolls = new Button("Encuestas");
-		btnPolls.setStyle(GUIStyles.BUTTON_STYLE);
-		btnPolls.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				btnPollsClicked();
-			}
-		});
-		col.add(btnPolls);
-
 		Button btnWorks = new Button("Tareas");
 		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
 		btnWorks.addActionListener(new ActionListener() {
@@ -89,13 +79,6 @@ public class MenuPane extends Panel {
 	private void btnHomeClicked() {
 
 		MainPane panel = new MainPane();
-		app.getDesktop().setCentralPanel(panel);
-
-	}
-
-	private void btnPollsClicked() {
-
-		AutoCoEvaluationPane panel = new AutoCoEvaluationPane();
 		app.getDesktop().setCentralPanel(panel);
 
 	}

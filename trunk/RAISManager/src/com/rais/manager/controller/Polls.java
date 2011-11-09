@@ -8,10 +8,9 @@ import nextapp.echo.app.Label;
 import nextapp.echo.app.RadioButton;
 
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 
 import com.csvreader.CsvWriter;
-import com.rais.manager.database.Group;
+import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.SessionHibernate;
 import com.rais.manager.database.User;
 import com.rais.manager.interfaz.AutoCoEvaluationPane;
@@ -20,7 +19,12 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
+	private Polls() {
+		/* empty */
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public static List<String> loadPartnersData(User user) {
 
 		List<String> partnersList = new ArrayList<String>();
@@ -32,19 +36,13 @@ public class Polls {
 			session = SessionHibernate.getInstance().getSession();
 			session.beginTransaction();
 
-			Group group = user.getStudentRef().getGroupRef();
+			List<GroupStudent> groupStudentList = //
+					user.getStudentRef().getGroupStudentList();
 
-			List<User> userList = session.createCriteria( //
-					User.class).addOrder(Order.asc("name")).list();
+			for (int i = 0; i < groupStudentList.size(); i++) {
 
-			for (int i = 0; i < userList.size(); i++) {
-
-				Group curr = userList.get(i).getStudentRef().getGroupRef();
-
-				if ((curr.getId() == group.getId()) //
-						&& (userList.get(i).getId() != user.getId())) {
-					partnersList.add(userList.get(i).getName());
-				}
+				partnersList.add(groupStudentList.get(i) //
+						.getStudentRef().getUserRef().getName());
 
 			}
 

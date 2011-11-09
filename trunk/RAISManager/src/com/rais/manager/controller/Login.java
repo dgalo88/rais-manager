@@ -16,6 +16,14 @@ import com.rais.manager.interfaz.LoginPane;
 
 public class Login {
 
+	// --------------------------------------------------------------------------------
+
+	private Login() {
+		/* empty */
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public static boolean login(LoginPane pane) {
 
 		Session session = null;
@@ -29,7 +37,7 @@ public class Login {
 
 				criteria = session.createCriteria(User.class).add( //
 						Restrictions.and( //
-								Restrictions.eq("alias", pane.getTxtUser().getText()), //
+								Restrictions.eq("cedula", pane.getTxtCedula().getText()), //
 								Restrictions.eq("password", //
 										decrypt(pane.getFldPassword().getText()))));
 

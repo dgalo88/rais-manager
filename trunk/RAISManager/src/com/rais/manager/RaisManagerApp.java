@@ -1,11 +1,11 @@
 package com.rais.manager;
 
-import com.rais.manager.Desktop.DesktopType;
-import com.rais.manager.database.User;
-
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.ContentPane;
 import nextapp.echo.app.Window;
+
+import com.rais.manager.Desktop.DesktopType;
+import com.rais.manager.database.User;
 
 @SuppressWarnings("serial")
 public class RaisManagerApp extends ApplicationInstance {

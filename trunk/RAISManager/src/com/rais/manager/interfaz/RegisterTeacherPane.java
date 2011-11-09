@@ -69,7 +69,7 @@ public class RegisterTeacherPane extends Panel {
 
 		mattersMenu = new String[3];
 		mattersMenu[0] = "Seleccione materia";
-		mattersMenu[1] = "Ingenier�a de Software";
+		mattersMenu[1] = "Ingeniería de Software";
 		mattersMenu[2] = "Bases de Datos";
 
 		selectMatter = new SelectField(getMattersMenu());

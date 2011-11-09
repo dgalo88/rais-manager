@@ -15,12 +15,11 @@ import org.hibernate.annotations.Proxy;
 public class User {
 
 	private int id;
-	private String alias;
 	private String name;
 	private String cedula;
-	private String mail;
 	private String password;
 	private Student studentRef;
+	private Teacher teacherRef;
 
 	// --------------------------------------------------------------------------------
 
@@ -46,32 +45,12 @@ public class User {
 
 	// --------------------------------------------------------------------------------
 
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	// --------------------------------------------------------------------------------
-
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
 
 	public String getCedula() {
 		return cedula;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public String getMail() {
-		return mail;
-	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
 	}
 
 	// --------------------------------------------------------------------------------
@@ -93,6 +72,17 @@ public class User {
 	@OneToOne
 	public Student getStudentRef() {
 		return studentRef;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public void setTeacherRef(Teacher teacherRef) {
+		this.teacherRef = teacherRef;
+	}
+
+	@OneToOne
+	public Teacher getTeacherRef() {
+		return teacherRef;
 	}
 
 	// --------------------------------------------------------------------------------
