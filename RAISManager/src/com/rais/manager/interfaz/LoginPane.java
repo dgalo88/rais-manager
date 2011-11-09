@@ -12,14 +12,14 @@ import nextapp.echo.app.Label;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.PasswordField;
 import nextapp.echo.app.Row;
-import nextapp.echo.app.TextField;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import org.informagen.echo.app.IntegerTextField;
 
 import com.rais.manager.Desktop.DesktopType;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Login;
-import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -28,7 +28,7 @@ public class LoginPane extends Panel {
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
 
-	private TextField txtUser;
+	private IntegerTextField txtCedula;
 	private PasswordField fldPassword;
 
 	public LoginPane() {
@@ -52,13 +52,15 @@ public class LoginPane extends Panel {
 		grid.setBorder(new Border( //
 				new Extent(1), Color.BLACK, Border.STYLE_INSET));
 
-		Label lblUser = new Label("Usuario:");
-		GUIStyles.setFont(lblUser, GUIStyles.NORMAL);
-		grid.add(lblUser);
+		Label lblCedula = new Label("Cédula:");
+		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL);
+		grid.add(lblCedula);
 
-		txtUser = new TextField();
-		GUIStyles.setFont(txtUser, GUIStyles.NORMAL);
-		grid.add(txtUser);
+		txtCedula = new IntegerTextField();
+		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
+		txtCedula.setMaximumLength(9);
+		txtCedula.setMinimumValue(0);
+		grid.add(txtCedula);
 
 		Label lblPassword = new Label("Contraseña:");
 		GUIStyles.setFont(lblPassword, GUIStyles.NORMAL);
@@ -88,15 +90,15 @@ public class LoginPane extends Panel {
 		});
 		rowButtons.add(btnEnter);
 
-		Button btnRegister = new Button("Registrarse");
-		btnRegister.setStyle(GUIStyles.BUTTON_STYLE);
-		btnRegister.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				btnRegisterClicked();
-			}
-		});
-		rowButtons.add(btnRegister);
+//		Button btnRegister = new Button("Registrarse");
+//		btnRegister.setStyle(GUIStyles.BUTTON_STYLE);
+//		btnRegister.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent evt) {
+//				btnRegisterClicked();
+//			}
+//		});
+//		rowButtons.add(btnRegister);
 
 		col.add(rowButtons);
 		row.add(col);
@@ -106,20 +108,20 @@ public class LoginPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	protected void btnRegisterClicked() {
-
-		RegisterPane pane = new RegisterPane(new User());
-		app.getDesktop().setCentralPanel(pane);
-
-	}
+//	protected void btnRegisterClicked() {
+//
+//		RegisterPane pane = new RegisterPane(new User());
+//		app.getDesktop().setCentralPanel(pane);
+//
+//	}
 
 	// --------------------------------------------------------------------------------
 
 	protected void btnEnterClicked() {
 
-		if (txtUser.getText().isEmpty()) {
+		if (txtCedula.getText().isEmpty()) {
 			app.getDesktop().setWindowPaneEmergente( //
-					"Ingrese el nombre de usuario");
+					"Ingrese número de cédula");
 			return;
 		}
 
@@ -129,7 +131,7 @@ public class LoginPane extends Panel {
 
 		if (!Login.login(this)) {
 			app.getDesktop().setWindowPaneEmergente( //
-					"Usuario no válido");
+					"Número de cédula no válido");
 			return;
 		}
 
@@ -159,12 +161,12 @@ public class LoginPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	public TextField getTxtUser() {
-		return txtUser;
+	public IntegerTextField getTxtCedula() {
+		return txtCedula;
 	}
 
-	public void setTxtUser(TextField txtUser) {
-		this.txtUser = txtUser;
+	public void setTxtCedula(IntegerTextField txtCedula) {
+		this.txtCedula = txtCedula;
 	}
 
 	public PasswordField getFldPassword() {

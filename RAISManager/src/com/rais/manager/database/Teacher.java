@@ -17,15 +17,13 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "t_student")
+@Table(name = "t_teacher")
 @Proxy(lazy = false)
-public class Student {
+public class Teacher {
 
 	private int id;
 	private User userRef;
-	private List<Poll> pollList;
-	private List<PollStudent> pollStudentList;
-	private List<GroupStudent> groupStudentList;
+	private List<GroupTeacher> groupTeacherList;
 
 	// --------------------------------------------------------------------------------
 
@@ -52,44 +50,16 @@ public class Student {
 
 	// --------------------------------------------------------------------------------
 
-	public void setPollList(List<Poll> pollList) {
-		this.pollList = pollList;
+	public void setGroupTeacherList(List<GroupTeacher> groupTeacherList) {
+		this.groupTeacherList = groupTeacherList;
 	}
 
 	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
+	@OneToMany(mappedBy = "teacherRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<Poll> getPollList() {
-		return pollList;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public void setPollStudentList(List<PollStudent> pollStudentList) {
-		this.pollStudentList = pollStudentList;
-	}
-
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
-	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<PollStudent> getPollStudentList() {
-		return pollStudentList;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public void setGroupStudentList(List<GroupStudent> groupStudentList) {
-		this.groupStudentList = groupStudentList;
-	}
-
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
-	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<GroupStudent> getGroupStudentList() {
-		return groupStudentList;
+	public List<GroupTeacher> getGroupTeacherList() {
+		return groupTeacherList;
 	}
 
 	// --------------------------------------------------------------------------------

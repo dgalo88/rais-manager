@@ -24,8 +24,8 @@ public class Group {
 	private byte[] logo;
 	private int id;
 	private List<Poll> pollList;
-	private List<Student> studentList;
-//	private List<GroupStudent> groupStudentList;
+	private List<GroupStudent> groupStudentList;
+	private List<GroupTeacher> groupTeacherList;
 
 	// --------------------------------------------------------------------------------
 
@@ -75,28 +75,30 @@ public class Group {
 
 	// --------------------------------------------------------------------------------
 
-//	public void setGroupStudentList(List<GroupStudent> groupStudentList) {
-//		this.groupStudentList = groupStudentList;
-//	}
-//
-//	@SuppressWarnings("deprecation")
-//	@OneToMany(mappedBy = "groupRef")
-//	@LazyCollection(LazyCollectionOption.TRUE)
-//	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-//	public List<GroupStudent> getGroupStudentList() {
-//		return groupStudentList;
-//	}
-
-	public void setStudentList(List<Student> studentList) {
-		this.studentList = studentList;
+	public void setGroupStudentList(List<GroupStudent> groupStudentList) {
+		this.groupStudentList = groupStudentList;
 	}
 
 	@SuppressWarnings("deprecation")
 	@OneToMany(mappedBy = "groupRef")
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
-	public List<Student> getStudentList() {
-		return studentList;
+	public List<GroupStudent> getGroupStudentList() {
+		return groupStudentList;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public void setGroupTeacherList(List<GroupTeacher> groupTeacherList) {
+		this.groupTeacherList = groupTeacherList;
+	}
+
+	@SuppressWarnings("deprecation")
+	@OneToMany(mappedBy = "groupRef")
+	@LazyCollection(LazyCollectionOption.TRUE)
+	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
+	public List<GroupTeacher> getGroupTeacherList() {
+		return groupTeacherList;
 	}
 
 	// --------------------------------------------------------------------------------

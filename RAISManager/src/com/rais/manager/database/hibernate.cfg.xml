@@ -87,10 +87,12 @@
 
 		<mapping class="com.rais.manager.database.User" />
 		<mapping class="com.rais.manager.database.Student" />
+		<mapping class="com.rais.manager.database.Teacher" />
 		<mapping class="com.rais.manager.database.Poll" />
 		<mapping class="com.rais.manager.database.PollStudent" />
 		<mapping class="com.rais.manager.database.Group" />
 		<mapping class="com.rais.manager.database.GroupStudent" />
+		<mapping class="com.rais.manager.database.GroupTeacher" />
 
 	</session-factory>
 </hibernate-configuration>

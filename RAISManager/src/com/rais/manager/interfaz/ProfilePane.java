@@ -47,9 +47,9 @@ public class ProfilePane extends Panel {
 		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL, 14);
 		col.add(lblCedula);
 
-		Label lblMail = new Label("Correo: " + user.getMail());
-		GUIStyles.setFont(lblMail, GUIStyles.NORMAL, 14);
-		col.add(lblMail);
+//		Label lblMail = new Label("Correo: " + student.getMail());
+//		GUIStyles.setFont(lblMail, GUIStyles.NORMAL, 14);
+//		col.add(lblMail);
 
 		row.add(col);
 		add(row);

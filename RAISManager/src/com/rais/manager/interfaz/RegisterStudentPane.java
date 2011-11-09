@@ -297,8 +297,8 @@ public class RegisterStudentPane extends Panel {
 		return user;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(User Student) {
+		this.user = Student;
 	}
 
 	public Group getGroup() {

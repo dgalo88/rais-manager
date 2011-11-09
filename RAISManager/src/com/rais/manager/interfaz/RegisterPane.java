@@ -89,19 +89,17 @@ public class RegisterPane extends Panel {
 		col.add(Constructor.initTopRow("Registro de Usuario", 14));
 		col.add(Constructor.initTopRow("Datos Personales:", 13));
 
-		Label lblAlias = new Label("Nombre de Usuario:");
-		GUIStyles.setFont(lblAlias, GUIStyles.NORMAL);
-		grid.add(lblAlias);
-
-		txtAlias = new TextField();
-		GUIStyles.setFont(txtAlias, GUIStyles.NORMAL);
-		txtAlias.setWidth(new Extent(300));
-		txtAlias.setMaximumLength(10);
-		txtAlias.setToolTipText( //
-				"Digite el nombre de usuario que utilizará para " +
-				"acceder al sistema. Este debe contener máximo 10 dígitos");
-		txtAlias.setText(user.getAlias());
-		grid.add(txtAlias);
+//		Label lblAlias = new Label("Nombre de Usuario:");
+//		GUIStyles.setFont(lblAlias, GUIStyles.NORMAL);
+//		grid.add(lblAlias);
+//
+//		txtAlias = new TextField();
+//		GUIStyles.setFont(txtAlias, GUIStyles.NORMAL);
+//		txtAlias.setWidth(new Extent(300));
+//		txtAlias.setToolTipText( //
+//				"Digite el nombre de usuario que utilizará para acceder al sistema.");
+//		txtAlias.setText(student.getAlias());
+//		grid.add(txtAlias);
 
 		Label lblName = new Label("Nombre y Apellido:");
 		GUIStyles.setFont(lblName, GUIStyles.NORMAL);
@@ -120,20 +118,20 @@ public class RegisterPane extends Panel {
 		txtCedula = new IntegerTextField();
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
 		txtCedula.setWidth(new Extent(280));
-		txtCedula.setMaximumLength(8);
+		txtCedula.setMaximumLength(9);
 		txtCedula.setMinimumValue(0);
 		txtCedula.setText(user.getCedula());
 		grid.add(txtCedula);
 
-		Label lblMail = new Label("Correo:");
-		GUIStyles.setFont(lblMail, GUIStyles.NORMAL);
-		grid.add(lblMail);
-
-		txtMail = new TextField();
-		GUIStyles.setFont(txtMail, GUIStyles.NORMAL);
-		txtMail.setWidth(new Extent(300));
-		txtMail.setText(user.getMail());
-		grid.add(txtMail);
+//		Label lblMail = new Label("Correo:");
+//		GUIStyles.setFont(lblMail, GUIStyles.NORMAL);
+//		grid.add(lblMail);
+//
+//		txtMail = new TextField();
+//		GUIStyles.setFont(txtMail, GUIStyles.NORMAL);
+//		txtMail.setWidth(new Extent(300));
+//		txtMail.setText(student.getMail());
+//		grid.add(txtMail);
 
 		Label lblCompany = new Label("Tipo de usuario:");
 		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL);
@@ -163,10 +161,9 @@ public class RegisterPane extends Panel {
 		fldPassword = new PasswordField();
 		GUIStyles.setFont(fldPassword, GUIStyles.NORMAL);
 		fldPassword.setWidth(new Extent(300));
-		fldPassword.setMaximumLength(12);
 		fldPassword.setToolTipText( //
 				"Digite la contraseña que utilizará para acceder al sistema. " + //
-				"Esta debe contener entre 6 y 12 dígitos");
+				"Esta debe contener mínimo 6 dígitos");
 		grid.add(fldPassword);
 
 		Label lblConfirmPassword = new Label("Confirmar Contraseña:");
@@ -176,7 +173,6 @@ public class RegisterPane extends Panel {
 		fldConfirmPassword = new PasswordField();
 		GUIStyles.setFont(fldConfirmPassword, GUIStyles.NORMAL);
 		fldConfirmPassword.setWidth(new Extent(300));
-		fldConfirmPassword.setMaximumLength(12);
 		fldConfirmPassword.setToolTipText( //
 				"Confirme la contraseña digitada anteriormente");
 		grid.add(fldConfirmPassword);
