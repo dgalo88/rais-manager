@@ -1,7 +1,6 @@
 package com.rais.manager.interfaz;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import nextapp.echo.app.Alignment;
@@ -22,7 +21,6 @@ import nextapp.echo.app.button.ButtonGroup;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
-import com.csvreader.CsvWriter;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Polls;
 import com.rais.manager.styles.GUIStyles;
@@ -32,10 +30,6 @@ public class AutoCoEvaluationPane extends Panel {
 
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
-
-	private CsvWriter csv = new CsvWriter( //
-			"auto-co-evaluation.csv", ',', //
-			Charset.forName("UTF-8"));
 
 	private Label[] lblElement = new Label[5];
 	private List<String> partnersList;
@@ -525,7 +519,7 @@ public class AutoCoEvaluationPane extends Panel {
 		//TODO
 
 		try {
-			Polls.exportAutoEvaluation(this);
+			Polls.exportAutoEvaluation(this, app.getUser());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -565,16 +559,6 @@ public class AutoCoEvaluationPane extends Panel {
 		MainPane pane = new MainPane();
 		app.getDesktop().setCentralPanel(pane);
 
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public CsvWriter getCsv() {
-		return csv;
-	}
-
-	public void setCsv(CsvWriter csv) {
-		this.csv = csv;
 	}
 
 	// --------------------------------------------------------------------------------
