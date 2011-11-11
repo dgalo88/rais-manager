@@ -15,6 +15,8 @@ import org.hibernate.annotations.Proxy;
 public class PollStudent {
 
 	private int id;
+	private String status;
+	private String valuation;
 	private Poll pollRef;
 	private Student studentRef;
 
@@ -28,6 +30,26 @@ public class PollStudent {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public String getValuation() {
+		return valuation;
+	}
+
+	public void setValuation(String valuation) {
+		this.valuation = valuation;
 	}
 
 	// --------------------------------------------------------------------------------
