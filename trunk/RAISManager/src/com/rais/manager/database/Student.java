@@ -10,8 +10,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
@@ -56,10 +54,8 @@ public class Student {
 		this.pollList = pollList;
 	}
 
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
+	@OneToMany(mappedBy = "studentRef", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
 	public List<Poll> getPollList() {
 		return pollList;
 	}
@@ -70,10 +66,8 @@ public class Student {
 		this.pollStudentList = pollStudentList;
 	}
 
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
+	@OneToMany(mappedBy = "studentRef", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
 	public List<PollStudent> getPollStudentList() {
 		return pollStudentList;
 	}
@@ -84,10 +78,8 @@ public class Student {
 		this.groupStudentList = groupStudentList;
 	}
 
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "studentRef")
+	@OneToMany(mappedBy = "studentRef", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
 	public List<GroupStudent> getGroupStudentList() {
 		return groupStudentList;
 	}
