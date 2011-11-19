@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 import com.rais.manager.database.Group;
 import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.Poll;
+import com.rais.manager.database.PollStudent;
 import com.rais.manager.database.SessionHibernate;
 import com.rais.manager.database.Student;
 import com.rais.manager.database.User;
@@ -35,9 +36,15 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	public static List<String> loadPartnersData(User user) {
+	/**
+	 * Load a list of partners of company.
+	 * 
+	 * @param user
+	 * @return A list of user, which are partners of company
+	 */
+	public static List<User> loadPartnersData(User user) {
 
-		List<String> partnersList = new ArrayList<String>();
+		List<User> partnersList = new ArrayList<User>();
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
@@ -49,13 +56,19 @@ public class Polls {
 		user = (User) criteria.uniqueResult();
 		Student student = user.getStudentRef();
 
-		List<GroupStudent> groupStudentList = //
-				student.getGroupStudentList();
+		GroupStudent groupStudent = //
+				student.getGroupStudentList().get(0);
+
+		Group group = groupStudent.getGroupRef();
+
+		List<GroupStudent> groupStudentList = group.getGroupStudentList();
+
+		groupStudentList.remove(groupStudent);
 
 		for (int i = 0; i < groupStudentList.size(); i++) {
 
 			partnersList.add(groupStudentList.get(i) //
-					.getStudentRef().getUserRef().getName());
+					.getStudentRef().getUserRef());
 
 		}
 
@@ -68,7 +81,7 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	public static void exportAutoEvaluation(AutoCoEvaluationPane panel, User user) //
+	public static void answerAutoEvaluation(AutoCoEvaluationPane panel, User user) //
 			throws IOException {
 
 		Session session = SessionHibernate.getInstance().getSession();
@@ -118,6 +131,14 @@ public class Polls {
 		poll.setStatus(Polls.ANSWERED);
 		session.update(poll);
 
+		panel.setPoll(poll);
+
+		//Crear Encuestas de Co-Evaluación: 
+		//1) Cargar lista de compañeros
+		//2) Crear encuesta para cada compañero
+		panel.setPartnersList(loadPartnersData(user));
+		createCoEvaluations(panel, session, student);
+
 		session.getTransaction().commit();
 		session.close();
 
@@ -125,21 +146,109 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	public static void exportCoEvaluation(AutoCoEvaluationPane panel) //
+	private static void createCoEvaluations(AutoCoEvaluationPane panel, //
+			Session session, Student student) {
+
+		Criteria criteria = session.createCriteria( //
+				Poll.class).add(Restrictions.eq( //
+						"id", panel.getPoll().getId()));
+
+		Poll poll = (Poll) criteria.uniqueResult();
+
+		List<PollStudent> pollStudentList;
+		if (student.getPollStudentList() != null) {
+			pollStudentList = student.getPollStudentList();
+		} else {
+			pollStudentList = new ArrayList<PollStudent>();
+		}
+
+		List<User> partnersList = panel.getPartnersList();
+
+		for (int i = 0; i < partnersList.size(); i++) {
+
+			criteria = session.createCriteria( //
+					User.class).add(Restrictions.eq( //
+							"id", partnersList.get(i).getId()));
+
+			User userPartner = (User) criteria.uniqueResult();
+			Student studentPartner = (Student) userPartner.getStudentRef();
+
+			PollStudent pollStudent = new PollStudent();
+			pollStudent.setPollRef(poll);
+			pollStudent.setStudentRef(studentPartner);
+			pollStudent.setStatus(Polls.NO_ANSWERED);
+			pollStudent.setValuation(Polls.NO_ANSWERED);
+
+			session.save(pollStudent);
+
+			pollStudentList.add(pollStudent);
+
+		}
+
+		session.update(student);
+		session.update(poll);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void answerCoEvaluation(AutoCoEvaluationPane panel, User user) //
 			throws IOException {
 
-		List<String> partnersList = panel.getPartnersList();
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		Criteria criteria = session.createCriteria( //
+				Poll.class).add(Restrictions.eq( //
+						"id", panel.getPoll().getId()));
+
+		Poll poll = (Poll) criteria.uniqueResult();
+
+		List<PollStudent> pollStudentList = poll.getPollStudentList();
+
+		List<User> partnersList = panel.getPartnersList();
 		RadioButton[][] coRadioButtons = panel.getCoRadioBtn();
 
 		for (int i = 0; i < partnersList.size(); i++) {
 
+			criteria = session.createCriteria( //
+					User.class).add(Restrictions.eq( //
+							"id", partnersList.get(i).getId()));
+
+			User userPartner = (User) criteria.uniqueResult();
+			Student studentPartner = (Student) userPartner.getStudentRef();
+
+			PollStudent pollStudent = getPollStudent(studentPartner, pollStudentList);
+
 			for (int j = 0; j < 4; j++) {
 				if (coRadioButtons[i][j].isSelected()) {
-					getOptionSelected(j);
+					pollStudent.setValuation(getOptionSelected(j));
 				}
 			}
+			pollStudent.setStatus(Polls.ANSWERED);
+
+			session.update(pollStudent);
+			session.update(studentPartner);
 
 		}
+		session.update(poll);
+
+		session.getTransaction().commit();
+		session.close();
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private static PollStudent getPollStudent( //
+			Student studentPartner, List<PollStudent> pollStudentList) {
+
+		for (PollStudent pollStudent : pollStudentList) {
+			if (pollStudent.getStudentRef().equals(studentPartner)) {
+				return pollStudent;
+			}
+		}
+		return null;
 
 	}
 

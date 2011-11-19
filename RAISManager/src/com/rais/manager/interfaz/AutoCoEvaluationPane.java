@@ -23,6 +23,8 @@ import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Polls;
+import com.rais.manager.database.Poll;
+import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
@@ -31,8 +33,10 @@ public class AutoCoEvaluationPane extends Panel {
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
 
+	private List<User> partnersList;
+	private Poll poll;
+
 	private Label[] lblElement = new Label[5];
-	private List<String> partnersList;
 	private RadioButton[][] autoRadioBtn = new RadioButton[5][4];
 	private ButtonGroup[] autoBtnGroup = new ButtonGroup[5];
 	private ButtonGroup[] coBtnGroup;
@@ -443,9 +447,6 @@ public class AutoCoEvaluationPane extends Panel {
 		centerRow.add(lblD);
 		grid.add(centerRow);
 
-		//Cargar Compañeros
-		partnersList = Polls.loadPartnersData(app.getUser());
-
 		coBtnGroup = new ButtonGroup[partnersList.size()];
 		coRadioBtn = new RadioButton[partnersList.size()][4];
 
@@ -454,7 +455,7 @@ public class AutoCoEvaluationPane extends Panel {
 			centerRow = new Row();
 			centerRow.setAlignment(Alignment.ALIGN_CENTER);
 
-			Label lblPartner = new Label(partnersList.get(i));
+			Label lblPartner = new Label(partnersList.get(i).getName());
 			GUIStyles.setFont(lblPartner, GUIStyles.NORMAL, 12);
 			centerRow.add(lblPartner);
 			grid.add(centerRow);
@@ -488,18 +489,25 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("unused")
-	private boolean checkOptionSelected(ButtonGroup buttonGroup) {
+	private boolean checkOptionSelected(RadioButton[][] radioButton) {
 
-		RadioButton[] buttons = buttonGroup.getButtons();
+		boolean selected = true;
 
-		for (int i = 0; i < buttons.length; i++) {
-			if (buttons[i].isSelected()) {
-				return true;
+		for (int i = 0; i < radioButton.length; i++) {
+
+			boolean optionSelected = false;
+
+			for (int j = 0; j < radioButton[i].length; j++) {
+				if (radioButton[i][j].isSelected()) {
+					optionSelected = true;
+				}
 			}
+
+			selected &= optionSelected;
+
 		}
 
-		return false;
+		return selected;
 
 	}
 
@@ -516,10 +524,14 @@ public class AutoCoEvaluationPane extends Panel {
 
 	private void btnNextClicked() {
 
-		//TODO
+		if (!checkOptionSelected(autoRadioBtn)) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Debes responder todas las preguntas");
+			return;
+		}
 
 		try {
-			Polls.exportAutoEvaluation(this, app.getUser());
+			Polls.answerAutoEvaluation(this, app.getUser());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -550,8 +562,14 @@ public class AutoCoEvaluationPane extends Panel {
 
 	private void btnSendClicked() {
 
+		if (!checkOptionSelected(coRadioBtn)) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Debes responder todas las preguntas");
+			return;
+		}
+
 		try {
-			Polls.exportCoEvaluation(this);
+			Polls.answerCoEvaluation(this, app.getUser());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -563,22 +581,30 @@ public class AutoCoEvaluationPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
+	public List<User> getPartnersList() {
+		return partnersList;
+	}
+
+	public void setPartnersList(List<User> partnersList) {
+		this.partnersList = partnersList;
+	}
+
+	public Poll getPoll() {
+		return poll;
+	}
+
+	public void setPoll(Poll poll) {
+		this.poll = poll;
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public Label[] getLblElement() {
 		return lblElement;
 	}
 
 	public void setLblElement1(Label[] lblElement) {
 		this.lblElement = lblElement;
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public List<String> getPartnersList() {
-		return partnersList;
-	}
-
-	public void setPartnersList(List<String> partnersList) {
-		this.partnersList = partnersList;
 	}
 
 	// --------------------------------------------------------------------------------

@@ -1,7 +1,5 @@
 package com.rais.manager.controller;
 
-import java.security.MessageDigest;
-
 import javax.servlet.http.HttpSession;
 
 import nextapp.echo.webcontainer.WebContainerServlet;
@@ -39,7 +37,7 @@ public class Login {
 						Restrictions.and( //
 								Restrictions.eq("cedula", pane.getTxtCedula().getText()), //
 								Restrictions.eq("password", //
-										decrypt(pane.getFldPassword().getText()))));
+										Data.encrypt(pane.getFldPassword().getText()))));
 
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -82,32 +80,6 @@ public class Login {
 
 		}
 		return true;
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private static String decrypt(String password) //
-			throws IllegalStateException, Exception {
-
-		MessageDigest md = MessageDigest.getInstance("SHA");
-		byte[] b = md.digest(password.getBytes());
-
-		int size = b.length;
-		StringBuffer h = new StringBuffer(size);
-
-		for (int i = 0; i < size; i++) {
-
-			int u = b[i] & 255;
-
-			if (u < 16) {
-				h.append("0" + Integer.toHexString(u));
-			} else {
-				h.append(Integer.toHexString(u));
-			}
-
-		}
-		return h.toString();
 
 	}
 

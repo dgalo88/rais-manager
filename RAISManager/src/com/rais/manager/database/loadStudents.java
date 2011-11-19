@@ -1,12 +1,13 @@
 package com.rais.manager.database;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+
+import com.rais.manager.controller.Data;
 
 public class loadStudents {
 
@@ -46,7 +47,7 @@ public class loadStudents {
 		user[0].setCedula("12345678");
 		user[0].setName("Jefe Ejecutivo");
 		try {
-			user[0].setPassword(encrypt("123456"));
+			user[0].setPassword(Data.encrypt("123456"));
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -97,7 +98,7 @@ public class loadStudents {
 			user[i].setName("Estudiante Numero " + (i));
 			user[i].setCedula(Integer.toString(i));
 			try {
-				user[i].setPassword(encrypt("123456"));
+				user[i].setPassword(Data.encrypt("123456"));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -137,32 +138,6 @@ public class loadStudents {
 
 		session.getTransaction().commit();
 		session.close();
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private static String encrypt(String password) //
-			throws IllegalStateException, Exception {
-
-		MessageDigest md = MessageDigest.getInstance("SHA");
-		byte[] b = md.digest(password.getBytes());
-
-		int size = b.length;
-		StringBuffer h = new StringBuffer(size);
-
-		for (int i = 0; i < size; i++) {
-
-			int u = b[i] & 255;
-
-			if (u < 16) {
-				h.append("0" + Integer.toHexString(u));
-			} else {
-				h.append(Integer.toHexString(u));
-			}
-
-		}
-		return h.toString();
 
 	}
 
