@@ -20,16 +20,15 @@ public class RaisManagerMain {
 
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 
 		currentDate = Calendar.getInstance();
 
-		if (currentDate.getTime().getDay() != Calendar.SATURDAY) {
-			return;
-		}
-
-		Polls.closeNoAnsweredPolls(currentDate);
+//		if (currentDate.getTime().getDay() != Calendar.SATURDAY) {
+//			return;
+//		}
+//
+//		Polls.closeNoAnsweredPolls(currentDate);
 		Polls.createPolls(currentDate);
 
 	}

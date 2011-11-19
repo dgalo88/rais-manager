@@ -10,8 +10,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Proxy;
@@ -54,10 +52,8 @@ public class Teacher {
 		this.groupTeacherList = groupTeacherList;
 	}
 
-	@SuppressWarnings("deprecation")
-	@OneToMany(mappedBy = "teacherRef")
+	@OneToMany(mappedBy = "teacherRef", orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@Cascade({CascadeType.ALL,CascadeType.DELETE_ORPHAN})
 	public List<GroupTeacher> getGroupTeacherList() {
 		return groupTeacherList;
 	}
