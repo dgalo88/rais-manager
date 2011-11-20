@@ -1,12 +1,10 @@
 package com.rais.manager.interfaz;
 
-import com.rais.manager.RaisManagerApp;
-import com.rais.manager.controller.Polls;
-import com.rais.manager.database.User;
-import com.rais.manager.styles.GUIStyles;
+import java.util.List;
 
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;
+import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Panel;
@@ -14,6 +12,17 @@ import nextapp.echo.app.ResourceImageReference;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
+
+import com.minotauro.echo.table.base.ETable;
+import com.minotauro.echo.table.base.TableColModel;
+import com.minotauro.echo.table.base.TableColumn;
+import com.minotauro.echo.table.renderer.LabelCellRenderer;
+import com.rais.manager.RaisManagerApp;
+import com.rais.manager.TestTableModel;
+import com.rais.manager.controller.Polls;
+import com.rais.manager.database.Poll;
+import com.rais.manager.database.User;
+import com.rais.manager.styles.GUIStyles;
 
 @SuppressWarnings("serial")
 public class MainPane extends Panel {
@@ -23,6 +32,11 @@ public class MainPane extends Panel {
 
 	private User user;
 	private int pollNum;
+
+	private TestTableModel tableDtaModel;
+	private List<Poll> pollList;
+
+	private Row tableRow;
 
 	// --------------------------------------------------------------------------------
 
@@ -40,14 +54,14 @@ public class MainPane extends Panel {
 		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
 		Column col = new Column();
-		col.setCellSpacing(new Extent(50));
+		col.setCellSpacing(new Extent(30));
 
 		col.add(Constructor.initTopRow("Hola " + user.getName() + ", Bienvenido!"));
 
 		if (user.getTeacherRef() == null) {
-			col.add(pollStatus());
+			col.add(studentRow());
 		} else {
-			//TODO
+			col.add(teacherComponent());
 		}
 
 		add(col);
@@ -56,9 +70,9 @@ public class MainPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private Row pollStatus() {
+	private Row studentRow() {
 
-		pollNum = Polls.checkPendingPoll(user);
+		pollNum = Polls.checkPendingPolls(user);
 
 		if (pollNum == 0) {
 			return Constructor.initTopRow( //
@@ -70,23 +84,23 @@ public class MainPane extends Panel {
 		row.setCellSpacing(new Extent(30));
 
 		row.add(Constructor.initTopRow( //
-				"Tienes " + pollNum + " encuestas pendiente", 14));
+				"Tienes " + pollNum + " encuesta pendiente", 14));
 
-		Button btnNotification = new Button();
-		btnNotification.setToolTipText("Ver Instrucciones");
-		btnNotification.setHeight(new Extent(30));
-		btnNotification.setWidth(new Extent(30));
-		btnNotification.setBackgroundImage(new FillImage( //
+		Button btnAnswerPoll = new Button();
+		btnAnswerPoll.setToolTipText("Responder encuesta");
+		btnAnswerPoll.setHeight(new Extent(30));
+		btnAnswerPoll.setWidth(new Extent(30));
+		btnAnswerPoll.setBackgroundImage(new FillImage( //
 				new ResourceImageReference("/com/rais/manager/images/notification.png", //
 						new Extent(30), new Extent(30)), //
 						new Extent(0), new Extent(0), FillImage.NO_REPEAT));
-		btnNotification.addActionListener(new ActionListener() {
+		btnAnswerPoll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnNotificationClicked();
+				btnAnswerPollClicked();
 			}
 		});
-		row.add(btnNotification);
+		row.add(btnAnswerPoll);
 
 		return row;
 
@@ -94,7 +108,97 @@ public class MainPane extends Panel {
 
 	// --------------------------------------------------------------------------------
 
-	private void btnNotificationClicked() {
+	private Component teacherComponent() {
+
+		Column col = new Column();
+//		col.setCellSpacing(new Extent(30));
+
+		Row row = new Row();
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
+		row.setCellSpacing(new Extent(30));
+
+		tableRow = new Row();
+		tableRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
+		tableRow.setVisible(false);
+
+		// ----------------------------------------
+		// Cargar encuestas sin contestar
+		// ----------------------------------------
+
+		tableDtaModel = new TestTableModel();
+		try {
+			Polls.getNoAnsweredPolls(this, tableDtaModel, pollList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		row.add(Constructor.initTopRow( //
+				"Hay " + pollList.size() + " encuestas sin contestar", 14));
+
+		Button btnDetails = new Button();
+		btnDetails.setToolTipText("Ver detalles");
+		btnDetails.setHeight(new Extent(30));
+		btnDetails.setWidth(new Extent(30));
+		btnDetails.setBackgroundImage(new FillImage( //
+				new ResourceImageReference("/com/rais/manager/images/notification.png", //
+						new Extent(30), new Extent(30)), //
+						new Extent(0), new Extent(0), FillImage.NO_REPEAT));
+		btnDetails.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				tableRow.setVisible(!tableRow.isVisible());
+			}
+		});
+		row.add(btnDetails);
+		col.add(row);
+
+		tableRow.add(Constructor.initTable(tableDtaModel, initTableColModel(), true));
+
+		col.add(tableRow);
+		return col;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private TableColModel initTableColModel() {
+
+		TableColModel tableColModel = new TableColModel();
+		TableColumn tableColumn;
+
+		tableColumn = new TableColumn() {
+			@Override
+			public Object getValue(ETable table, Object element) {
+				Poll poll = (Poll) element;
+				return poll.getId();
+			}
+		};
+		tableColumn.setWidth(new Extent(30));
+		tableColumn.setHeadValue("");
+		tableColumn.setHeadCellRenderer(new LabelCellRenderer());
+		tableColumn.setDataCellRenderer(new LabelCellRenderer());
+		tableColModel.getTableColumnList().add(tableColumn);
+
+		tableColumn = new TableColumn() {
+			@Override
+			public Object getValue(ETable table, Object element) {
+				Poll poll = (Poll) element;
+				return poll.getStudentRef().getUserRef().getName();
+			}
+		};
+		tableColumn.setWidth(new Extent(200));
+		tableColumn.setHeadValue("");
+		tableColumn.setHeadCellRenderer(new LabelCellRenderer());
+		tableColumn.setDataCellRenderer(new LabelCellRenderer());
+		tableColModel.getTableColumnList().add(tableColumn);
+
+		return tableColModel;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private void btnAnswerPollClicked() {
 
 		AutoCoEvaluationPane panel = new AutoCoEvaluationPane();
 		app.getDesktop().setCentralPanel(panel);
@@ -109,6 +213,16 @@ public class MainPane extends Panel {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public List<Poll> getPollList() {
+		return pollList;
+	}
+
+	public void setPollList(List<Poll> pollList) {
+		this.pollList = pollList;
 	}
 
 	// --------------------------------------------------------------------------------

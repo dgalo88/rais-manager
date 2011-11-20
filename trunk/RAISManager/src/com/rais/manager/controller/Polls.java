@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import com.rais.manager.TestTableModel;
 import com.rais.manager.database.Group;
 import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.Poll;
@@ -20,6 +21,7 @@ import com.rais.manager.database.SessionHibernate;
 import com.rais.manager.database.Student;
 import com.rais.manager.database.User;
 import com.rais.manager.interfaz.AutoCoEvaluationPane;
+import com.rais.manager.interfaz.MainPane;
 
 public class Polls {
 
@@ -280,7 +282,7 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	public static int checkPendingPoll(User user) {
+	public static int checkPendingPolls(User user) {
 
 		Session session = null;
 		int pollNum = 0;
@@ -451,6 +453,30 @@ public class Polls {
 			}
 
 		}
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	public static void getNoAnsweredPolls(MainPane panel, //
+			TestTableModel tableDtaModel, List<Poll> pollList) {
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		pollList = (List<Poll>) session.createCriteria( //
+				Poll.class).add(Restrictions.eq( //
+						"status", Polls.NO_ANSWERED)).list();
+
+		panel.setPollList(pollList);
+
+		for (Poll poll : pollList) {
+			tableDtaModel.add(poll);
+		}
+
+		session.getTransaction().commit();
+		session.close();
 
 	}
 

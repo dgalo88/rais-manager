@@ -51,15 +51,15 @@ public class MenuPane extends Panel {
 		});
 		col.add(btnProfile);
 
-		Button btnWorks = new Button("Tareas");
-		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
-		btnWorks.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				btnWorksClicked();
-			}
-		});
-		col.add(btnWorks);
+//		Button btnWorks = new Button("Tareas");
+//		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
+//		btnWorks.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent evt) {
+//				btnWorksClicked();
+//			}
+//		});
+//		col.add(btnWorks);
 
 		Button btnExit = new Button("Salir");
 		btnExit.setStyle(GUIStyles.BUTTON_STYLE);
@@ -90,12 +90,12 @@ public class MenuPane extends Panel {
 
 	}
 
-	private void btnWorksClicked() {
-
+//	private void btnWorksClicked() {
+//
 //		WorksPane panel = new WorksPane();
 //		app.getDesktop().setCentralPanel(panel);
-
-	}
+//
+//	}
 
 	private void btnExitClicked() {
 

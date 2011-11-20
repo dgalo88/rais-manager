@@ -1,14 +1,25 @@
 package com.rais.manager.interfaz;
 
-import com.rais.manager.styles.GUIStyles;
-
 import nextapp.echo.app.Alignment;
+import nextapp.echo.app.Border;
 import nextapp.echo.app.Color;
+import nextapp.echo.app.Column;
+import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Row;
 
+import com.minotauro.echo.table.base.ETable;
+import com.minotauro.echo.table.base.ETableNavigation;
+import com.minotauro.echo.table.base.TableColModel;
+import com.minotauro.echo.table.base.TableSelModel;
+import com.rais.manager.TestTableModel;
+import com.rais.manager.styles.GUIStyles;
+
 public class Constructor {
+
+	// --------------------------------------------------------------------------------
 
 	public static Row initTopRow(String texto) {
 
@@ -55,7 +66,7 @@ public class Constructor {
 
 	// --------------------------------------------------------------------------------
 
-/*	public static Component initTable(TestTableModel tableDtaModel, //
+	public static Component initTable(TestTableModel tableDtaModel, //
 			TableColModel initTableColModel, boolean isPageable) {
 
 		Column col = new Column();
@@ -83,14 +94,14 @@ public class Constructor {
 		table.setEasyview(true);
 		table.setBorder(new Border(1, Color.BLACK, Border.STYLE_NONE));
 		table.setInsets(new Insets(5, 2, 5, 2));
-//		GUIStyles.setFont(table, GUIStyles.NORMAL);
+		GUIStyles.setFont(table, GUIStyles.NORMAL);
 		col.add(table);
 
 		// ----------------------------------------
 		// The navigation control
 		// ----------------------------------------
 
-		if (isPageable) {
+		if ((isPageable) && (tableDtaModel.getTotalPages() > 1)) {
 
 			Row row = new Row();
 			row.setAlignment(Alignment.ALIGN_CENTER);
@@ -135,14 +146,14 @@ public class Constructor {
 		table.setEasyview(true);
 		table.setBorder(new Border(1, Color.BLACK, Border.STYLE_NONE));
 		table.setInsets(new Insets(5, 2, 5, 2));
-//		GUIStyles.setFont(table, GUIStyles.NORMAL);
+		GUIStyles.setFont(table, GUIStyles.NORMAL);
 		col.add(table);
 
 		// ----------------------------------------
 		// The navigation control
 		// ----------------------------------------
 
-		if (isPageable) {
+		if ((isPageable) && (tableDtaModel.getTotalPages() > 1)) {
 
 			Row row = new Row();
 			row.setAlignment(Alignment.ALIGN_CENTER);
@@ -188,14 +199,14 @@ public class Constructor {
 		table.setEasyview(true);
 		table.setBorder(new Border(1, Color.BLACK, Border.STYLE_NONE));
 		table.setInsets(new Insets(5, 2, 5, 2));
-//		GUIStyles.setFont(table, GUIStyles.NORMAL, fontSize);
+		GUIStyles.setFont(table, GUIStyles.NORMAL, fontSize);
 		col.add(table);
 
 		// ----------------------------------------
 		// The navigation control
 		// ----------------------------------------
 
-		if (isPageable) {
+		if ((isPageable) && (tableDtaModel.getTotalPages() > 1)) {
 
 			Row row = new Row();
 			row.setAlignment(Alignment.ALIGN_CENTER);
@@ -208,6 +219,8 @@ public class Constructor {
 		}
 
 		return col;
-	}*/
+	}
+
+	// --------------------------------------------------------------------------------
 
 }

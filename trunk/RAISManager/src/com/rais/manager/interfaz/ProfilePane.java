@@ -1,12 +1,18 @@
 package com.rais.manager.interfaz;
 
+import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Extent;
+import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.Row;
+import nextapp.echo.app.event.ActionEvent;
+import nextapp.echo.app.event.ActionListener;
 
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Data;
+import com.rais.manager.database.Group;
 import com.rais.manager.database.User;
 import com.rais.manager.styles.GUIStyles;
 
@@ -17,10 +23,18 @@ public class ProfilePane extends Panel {
 			RaisManagerApp.getActive();
 
 	private User user;
+	private Group group; 
+
+	private Row row;
+	private Column col;
+
+	// --------------------------------------------------------------------------------
 
 	public ProfilePane() {
 
 		user = app.getUser();
+		group = Data.getCompany(user);
+
 		initGui();
 
 	}
@@ -31,10 +45,10 @@ public class ProfilePane extends Panel {
 
 		setStyle(GUIStyles.CENTER_PANEL_STYLE);
 
-		Row row = new Row();
+		row = new Row();
 		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
-		Column col = new Column();
+		col = new Column();
 		col.setCellSpacing(new Extent(10));
 
 		col.add(Constructor.initTopRow("Perfil", 14));
@@ -47,12 +61,36 @@ public class ProfilePane extends Panel {
 		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL, 14);
 		col.add(lblCedula);
 
-//		Label lblMail = new Label("Correo: " + student.getMail());
-//		GUIStyles.setFont(lblMail, GUIStyles.NORMAL, 14);
-//		col.add(lblMail);
+		Label lblCompany = new Label("Compañía: " + group.getName());
+		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL, 14);
+		col.add(lblCompany);
 
+		Row buttonRow = new Row();
+		buttonRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
+		buttonRow.setInsets(new Insets(0, 10, 0, 10));
+
+		Button btnNewPassword = new Button("Cambiar contraseña");
+		btnNewPassword.setStyle(GUIStyles.BUTTON_STYLE);
+		btnNewPassword.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnNewPasswordClicked();
+			}
+		});
+		buttonRow.add(btnNewPassword);
+
+		col.add(buttonRow);
 		row.add(col);
 		add(row);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private void btnNewPasswordClicked() {
+
+		ChangePasswordPanel panel = new ChangePasswordPanel();
+		app.getDesktop().setCentralPanel(panel);
 
 	}
 
