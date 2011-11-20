@@ -11,8 +11,7 @@ import nextapp.echo.app.Panel;
 import com.rais.manager.interfaz.LoginPane;
 import com.rais.manager.interfaz.MainPane;
 import com.rais.manager.interfaz.MenuPane;
-import com.rais.manager.interfaz.windows.WindowInfo;
-import com.rais.manager.interfaz.windows.WindowInstructions;
+import com.rais.manager.interfaz.windows.RaisManagerWindow;
 import com.rais.manager.styles.GUIStyles;
 
 import echopoint.HtmlLayout;
@@ -29,8 +28,7 @@ public class Desktop extends ContentPane {
 		INDEX, MAIN
 	}
 
-	private WindowInfo windowInfo;
-	private WindowInstructions windowIntructions;
+	private RaisManagerWindow window;
 
 	private HtmlLayout htmlLayout;
 	private HtmlLayoutData hld;
@@ -151,19 +149,19 @@ public class Desktop extends ContentPane {
 
 	public void setWindowPaneEmergente(String texto) {
 
-		windowInfo = new WindowInfo(texto);
-		add(windowInfo);
+		window = new RaisManagerWindow(texto);
+		add(window);
 
 	}
 
 	// --------------------------------------------------------------------------------
 
-		public void setInstructionWindow(Panel pane) {
+	public void setInstructionWindow(Panel pane) {
 
-			windowIntructions = new WindowInstructions(pane);
-			add(windowIntructions);
+		window = new RaisManagerWindow(pane);
+		add(window);
 
-		}
+	}
 
 	// --------------------------------------------------------------------------------
 

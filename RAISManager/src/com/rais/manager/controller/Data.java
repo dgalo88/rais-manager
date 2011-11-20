@@ -16,7 +16,9 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.rais.manager.database.Group;
+import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.SessionHibernate;
+import com.rais.manager.database.Student;
 import com.rais.manager.database.User;
 
 public class Data {
@@ -29,54 +31,58 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
+	public static Group getCompany(User user) {
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"id", user.getId()));
+
+		user = (User) criteria.uniqueResult();
+		Student student = user.getStudentRef();
+
+		GroupStudent groupStudent = //
+				student.getGroupStudentList().get(0);
+
+		Group group = groupStudent.getGroupRef();
+
+		session.getTransaction().commit();
+		session.close();
+
+		return group;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
 	@SuppressWarnings("rawtypes")
-	public static Image getCompanyLogo(User user) throws IOException {
+	public static Image getCompanyLogo(Group group) throws IOException {
 
-		Session session = null;
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
 
-		try {
-			session = SessionHibernate.getInstance().getSession();
-			session.beginTransaction();
+		Criteria criteria = session.createCriteria( //
+				Group.class).add(Restrictions.eq( //
+						"id", group.getId()));
 
-			//			List<GroupStudent> groupStudentList = //
-			//					user.getStudentRef().getGroupStudentList();
+		group = (Group) criteria.uniqueResult();
 
-			//			Group group = user.getStudentRef().getGroupStudentList() //
-			//					.get(0).getGroupRef();
+		byte[] bytes = group.getLogo();
 
-			Criteria criteria = session.createCriteria( //
-					Group.class).add(Restrictions.eq( //
-							"name", "ATIS"));
+		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+		Iterator readers = ImageIO.getImageReadersByFormatName("png");
+		ImageReader reader = (ImageReader) readers.next();
+		Object source = bis; // File or InputStream
+		ImageInputStream iis = ImageIO.createImageInputStream(source);
+		reader.setInput(iis, true);
+		ImageReadParam param = reader.getDefaultReadParam();
 
-			Group group = (Group) criteria.uniqueResult();
+		session.getTransaction().commit();
+		session.close();
 
-			byte[] bytes = group.getLogo();
-
-			ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-			Iterator readers = ImageIO.getImageReadersByFormatName("png");
-			ImageReader reader = (ImageReader) readers.next();
-			Object source = bis; // File or InputStream
-			ImageInputStream iis = ImageIO.createImageInputStream(source);
-			reader.setInput(iis, true);
-			ImageReadParam param = reader.getDefaultReadParam();
-
-			return reader.read(0, param);
-
-		} finally {
-
-			// ----------------------------------------
-			// whatever happens, always close
-			// ----------------------------------------
-
-			if (session != null) {
-				if (session.getTransaction() != null) {
-					session.getTransaction().commit();
-				}
-
-				session.close();
-			}
-
-		}
+		return reader.read(0, param);
 
 	}
 
@@ -106,6 +112,65 @@ public class Data {
 
 	}
 
+	// --------------------------------------------------------------------------------
+
+	public static boolean checkPassword(String password, User user) {
+
+		boolean result = false;
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"id", user.getId()));
+
+		user = (User) criteria.uniqueResult();
+
+		try {
+
+			result = user.getPassword().equals(encrypt(password)) //
+					? true : false;
+
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		session.getTransaction().commit();
+		session.close();
+
+		return result;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void changePassword( //
+			String newPassword, User user) throws Exception {
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"id", user.getId()));
+
+		user = (User) criteria.uniqueResult();
+
+		try {
+			user.setPassword(encrypt(newPassword));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		session.getTransaction().commit();
+		session.close();
+
+	}
 
 	// --------------------------------------------------------------------------------
 
