@@ -11,6 +11,9 @@ import com.rais.manager.controller.Data;
 
 public class loadStudents {
 
+	public static final int STUDENTS_NUM = 10;
+	public static final int TEACHERS_NUM = 1;
+
 	// --------------------------------------------------------------------------------
 
 	private loadStudents() {
@@ -37,66 +40,76 @@ public class loadStudents {
 			group[i] = groupList.get(i);
 		}
 
-		User[] user = new User[10];
-		Student[] student = new Student[10];
-		List<GroupStudent> groupStudentList;
+		User[] user = new User[STUDENTS_NUM + TEACHERS_NUM];
 
 		//Cargar jefe ejecutivo
 
-		user[0] = new User();
-		user[0].setCedula("12345678");
-		user[0].setName("Jefe Ejecutivo");
-		try {
-			user[0].setPassword(Data.encrypt("123456"));
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		Teacher[] teacher = new Teacher[TEACHERS_NUM];
+
+		for (int i = 0; i < teacher.length; i++) {
+
+			user[i] = new User();
+			user[i].setCedula(Integer.toString(1234 + i));
+			user[i].setName("Jefe Ejecutivo " + Integer.toString(i + 1));
+
+			try {
+				user[i].setPassword(Data.encrypt("123456"));
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			session.save(user[i]);
+
+			teacher[i] = new Teacher();
+			teacher[i].setUserRef(user[i]);
+			session.save(teacher[i]);
+
+			List<GroupTeacher> groupTeacherList;
+
+			if (teacher[i].getGroupTeacherList() == null) {
+				groupTeacherList = new ArrayList<GroupTeacher>();
+			} else {
+				groupTeacherList = teacher[i].getGroupTeacherList();
+			}
+
+			for (int j = 0; j < group.length; j++) {
+
+				GroupTeacher groupTeacher = new GroupTeacher();
+				groupTeacher.setGroupRef(group[j]);
+				groupTeacher.setTeacherRef(teacher[i]);
+				session.save(groupTeacher);
+
+				groupTeacherList.add(groupTeacher);
+
+			}
+
+			for (int k = 0; k < group.length; k++) {
+				group[k].setGroupTeacherList(groupTeacherList);
+				session.update(group[k]);
+			}
+
+			teacher[i].setGroupTeacherList(groupTeacherList);
+			session.update(teacher[i]);
+
+			//Me aseguro que si el usuario es profesor
+			//la referencia a estudiante es null
+			user[i].setTeacherRef(teacher[i]);
+			user[i].setStudentRef(null);
+			session.update(user[i]);
+
 		}
-		session.save(user[0]);
-
-		Teacher teacher = new Teacher();
-		teacher.setUserRef(user[0]);
-		session.save(teacher);
-
-		List<GroupTeacher> groupTeacherList;
-
-		if (teacher.getGroupTeacherList() == null) {
-			groupTeacherList = new ArrayList<GroupTeacher>();
-		} else {
-			groupTeacherList = teacher.getGroupTeacherList();
-		}
-
-		for (int i = 0; i < group.length; i++) {
-
-			GroupTeacher groupTeacher = new GroupTeacher();
-			groupTeacher.setGroupRef(group[i]);
-			groupTeacher.setTeacherRef(teacher);
-			session.save(groupTeacher);
-
-			groupTeacherList.add(groupTeacher);
-
-		}
-
-		for (int i = 0; i < group.length; i++) {
-			group[i].setGroupTeacherList(groupTeacherList);
-			session.update(group[i]);
-		}
-
-		teacher.setGroupTeacherList(groupTeacherList);
-		session.update(teacher);
-
-		user[0].setTeacherRef(teacher);
-		user[0].setStudentRef(null);
-		session.update(user[0]);
 
 		//Cargar estudiantes
 
-		for (int i = 1; i < student.length; i++) {
+		Student[] student = new Student[STUDENTS_NUM];
+		List<GroupStudent> groupStudentList;
+
+		for (int i = 0; i < student.length; i++) {
 
 			user[i] = new User();
-			user[i].setName("Estudiante Numero " + (i));
-			user[i].setCedula(Integer.toString(i));
+			user[i].setName("Estudiante Numero " + (i + 1));
+			user[i].setCedula(Integer.toString(i + 1));
 			try {
 				user[i].setPassword(Data.encrypt("123456"));
 			} catch (IllegalStateException e) {
@@ -110,7 +123,7 @@ public class loadStudents {
 			student[i].setUserRef(user[i]);
 			session.save(student[i]);
 
-			int index = random.nextInt(3);
+			int index = random.nextInt(group.length);
 
 			GroupStudent groupStudent = new GroupStudent();
 			groupStudent.setGroupRef(group[index]);
@@ -130,6 +143,8 @@ public class loadStudents {
 			session.update(group[index]);
 			session.update(student[i]);
 
+			//Me aseguro que si el usuario es estudiante
+			//la referencia a profesor es null
 			user[i].setStudentRef(student[i]);
 			user[i].setTeacherRef(null);
 			session.update(user[i]);

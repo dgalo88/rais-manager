@@ -2,6 +2,7 @@ package com.rais.manager;
 
 import nextapp.echo.app.ApplicationInstance;
 import nextapp.echo.app.ContentPane;
+import nextapp.echo.app.HttpImageReference;
 import nextapp.echo.app.Window;
 
 import com.rais.manager.Desktop.DesktopType;
@@ -13,6 +14,7 @@ public class RaisManagerApp extends ApplicationInstance {
 	private User user;
 	private ContentPane contentPane;
 	private Desktop desktop;
+	private HttpImageReference imageReference;
 
 	@Override
 	public Window init() {
@@ -23,6 +25,8 @@ public class RaisManagerApp extends ApplicationInstance {
 		desktop = new Desktop(DesktopType.INDEX);
 		contentPane = new ContentPane();
 		contentPane.add(desktop);
+
+//		imageReference = new HttpImageReference("imagesdata?image_id=-1");
 
 		window.setContent(contentPane);
 		return window;
@@ -58,6 +62,16 @@ public class RaisManagerApp extends ApplicationInstance {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public HttpImageReference getImageReference() {
+		return imageReference;
+	}
+
+	public void setImageReference(HttpImageReference imageReference) {
+		this.imageReference = imageReference;
 	}
 
 	// --------------------------------------------------------------------------------

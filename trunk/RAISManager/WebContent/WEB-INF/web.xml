@@ -5,7 +5,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 
-	<!-- la url principal es: http://127.0.0.1:8080/RAISManager/raismanager.echo -->
+	<!--
+		******************************************************************************** 
+			la url principal es: http://127.0.0.1:8080/RAISManager/raismanager.echo
+		******************************************************************************** 
+	-->
 
 	<display-name>RAISManager</display-name>
 
@@ -18,5 +22,45 @@
 		<servlet-name>RaisManagerServlet</servlet-name>
 		<url-pattern>/raismanager.echo</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ImagesDataServlet</servlet-name>
+		<servlet-class>com.rais.manager.ImagesDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ImagesDataServlet</servlet-name>
+		<url-pattern>/imagesdata</url-pattern>
+	</servlet-mapping>
+
+	<!--
+		******************************************************************************** 
+		******************************************************************************** 
+	-->
+
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ImagesAppServlet</servlet-name> -->
+<!-- 		<servlet-class>com.rais.manager.images.servlet.ImagesAppServlet</servlet-class> -->
+<!-- 	</servlet> -->
+
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ImagesAppServlet</servlet-name> -->
+<!-- 		<url-pattern>/imagesapp.echo</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ImagesDataServlet</servlet-name> -->
+<!-- 		<servlet-class>com.rais.manager.images.servlet.ImagesDataServlet</servlet-class> -->
+<!-- 	</servlet> -->
+
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ImagesDataServlet</servlet-name> -->
+<!-- 		<url-pattern>/imagesdata</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+
+	<!--
+		******************************************************************************** 
+		******************************************************************************** 
+	-->
 
 </web-app>
