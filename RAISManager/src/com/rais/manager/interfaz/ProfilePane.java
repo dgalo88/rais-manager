@@ -65,6 +65,14 @@ public class ProfilePane extends Panel {
 		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL, 14);
 		col.add(lblCompany);
 
+		//Cargar logo de la Compañía
+//		app.setImageReference(new HttpImageReference( //
+//				"imagesdata?image_id=" + Integer.toString(group.getId())));
+//
+//		Label lblLogo = new Label(app.getImageReference());
+//		GUIStyles.setFont(lblLogo, GUIStyles.NORMAL, 14);
+//		col.add(lblLogo);
+
 		Row buttonRow = new Row();
 		buttonRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
 		buttonRow.setInsets(new Insets(0, 10, 0, 10));

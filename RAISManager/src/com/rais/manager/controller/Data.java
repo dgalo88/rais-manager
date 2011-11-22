@@ -1,15 +1,7 @@
 package com.rais.manager.controller;
 
-import java.awt.Image;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Iterator;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -31,16 +23,26 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
+	private static User loadUser(Session session, int userId) {
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"id", userId));
+
+		User user = (User) criteria.uniqueResult();
+		return user;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public static Group getCompany(User user) {
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
-		Criteria criteria = session.createCriteria( //
-				User.class).add(Restrictions.eq( //
-						"id", user.getId()));
+		user = loadUser(session, user.getId());
 
-		user = (User) criteria.uniqueResult();
 		Student student = user.getStudentRef();
 
 		GroupStudent groupStudent = //
@@ -57,32 +59,23 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("rawtypes")
-	public static Image getCompanyLogo(Group group) throws IOException {
+	public static byte[] getCompanyLogo(int groupId) throws IOException {
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
 		Criteria criteria = session.createCriteria( //
 				Group.class).add(Restrictions.eq( //
-						"id", group.getId()));
+						"id", groupId));
 
-		group = (Group) criteria.uniqueResult();
+		Group group = (Group) criteria.uniqueResult();
 
-		byte[] bytes = group.getLogo();
-
-		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-		Iterator readers = ImageIO.getImageReadersByFormatName("png");
-		ImageReader reader = (ImageReader) readers.next();
-		Object source = bis; // File or InputStream
-		ImageInputStream iis = ImageIO.createImageInputStream(source);
-		reader.setInput(iis, true);
-		ImageReadParam param = reader.getDefaultReadParam();
+		byte[] logo = group.getLogo();
 
 		session.getTransaction().commit();
 		session.close();
 
-		return reader.read(0, param);
+		return logo;
 
 	}
 
@@ -121,11 +114,7 @@ public class Data {
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
-		Criteria criteria = session.createCriteria( //
-				User.class).add(Restrictions.eq( //
-						"id", user.getId()));
-
-		user = (User) criteria.uniqueResult();
+		user = loadUser(session, user.getId());
 
 		try {
 
@@ -153,11 +142,7 @@ public class Data {
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
-		Criteria criteria = session.createCriteria( //
-				User.class).add(Restrictions.eq( //
-						"id", user.getId()));
-
-		user = (User) criteria.uniqueResult();
+		user = loadUser(session, user.getId());
 
 		try {
 			user.setPassword(encrypt(newPassword));
