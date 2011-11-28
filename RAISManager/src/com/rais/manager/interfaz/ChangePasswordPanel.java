@@ -101,16 +101,6 @@ public class ChangePasswordPanel extends Panel {
 		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 		row.setCellSpacing(new Extent(20));
 
-		Button btnChange = new Button("Cambiar");
-		btnChange.setStyle(GUIStyles.BUTTON_STYLE);
-		btnChange.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnChangeClicked();
-			}
-		});
-		row.add(btnChange);
-
 		Button btnCancel = new Button("Cancelar");
 		btnCancel.setStyle(GUIStyles.BUTTON_STYLE);
 		btnCancel.addActionListener(new ActionListener() {
@@ -120,6 +110,16 @@ public class ChangePasswordPanel extends Panel {
 			}
 		});
 		row.add(btnCancel);
+
+		Button btnChange = new Button("Cambiar");
+		btnChange.setStyle(GUIStyles.BUTTON_STYLE);
+		btnChange.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnChangeClicked();
+			}
+		});
+		row.add(btnChange);
 
 		col.add(row);
 		add(col);
@@ -144,17 +144,10 @@ public class ChangePasswordPanel extends Panel {
 		}
 
 		String message = "";
-
 		try {
-
-			Data.changePassword(fldNewPassword.getText(), user);
-			message = "Contraseña cambiada con éxito";
-
+			message = Data.changePassword(fldNewPassword.getText(), user);
 		} catch (Exception e) {
-
 			e.printStackTrace();
-			message = "Se ha producido un error. No se cambió la contraseña";
-
 		}
 		app.getDesktop().setWindowPaneEmergente(message);
 
@@ -185,9 +178,15 @@ public class ChangePasswordPanel extends Panel {
 			return false;
 		}
 
-		if (!Data.checkPassword(fldActualPassword.getText(), user)) {
+		if (!checkPasswordSize()) {
 			app.getDesktop().setWindowPaneEmergente( //
-					"Contraseña incorrecta");
+					"La contraseña debe tener un mínimo de 6 dígitos");
+			return false;
+		}
+
+		if (fldActualPassword.getText().equals(fldNewPassword.getText())) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Ingrese una contraseña diferente a la actual");
 			return false;
 		}
 
@@ -197,7 +196,23 @@ public class ChangePasswordPanel extends Panel {
 			return false;
 		}
 
+		if (!Data.checkPassword(fldActualPassword.getText(), user)) {
+			app.getDesktop().setWindowPaneEmergente( //
+					"Contraseña incorrecta");
+			return false;
+		}
+
 		return true;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private boolean checkPasswordSize() {
+
+		return !((fldActualPassword.getText().length() < 6) //
+				|| (fldNewPassword.getText().length() < 6) //
+				|| (fldConfirmPassword.getText().length() < 6));
 
 	}
 

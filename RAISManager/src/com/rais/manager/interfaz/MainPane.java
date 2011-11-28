@@ -19,6 +19,7 @@ import com.minotauro.echo.table.base.TableColumn;
 import com.minotauro.echo.table.renderer.LabelCellRenderer;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.TestTableModel;
+import com.rais.manager.controller.Data;
 import com.rais.manager.controller.Polls;
 import com.rais.manager.database.Poll;
 import com.rais.manager.database.User;
@@ -42,7 +43,7 @@ public class MainPane extends Panel {
 
 	public MainPane() {
 
-		user = app.getUser();
+		user = Data.loadUser(app.getUser().getId());
 		initGui();
 
 	}
@@ -111,15 +112,6 @@ public class MainPane extends Panel {
 	private Component teacherComponent() {
 
 		Column col = new Column();
-//		col.setCellSpacing(new Extent(30));
-
-		Row row = new Row();
-		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
-		row.setCellSpacing(new Extent(30));
-
-		tableRow = new Row();
-		tableRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
-		tableRow.setVisible(false);
 
 		// ----------------------------------------
 		// Cargar encuestas sin contestar
@@ -131,6 +123,18 @@ public class MainPane extends Panel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		if (pollList.isEmpty()) {
+			return col;
+		}
+
+		Row row = new Row();
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
+		row.setCellSpacing(new Extent(30));
+
+		tableRow = new Row();
+		tableRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
+		tableRow.setVisible(false);
 
 		row.add(Constructor.initTopRow( //
 				"Hay " + pollList.size() + " encuestas sin contestar", 14));

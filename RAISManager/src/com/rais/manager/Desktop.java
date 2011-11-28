@@ -68,11 +68,8 @@ public class Desktop extends ContentPane {
 
 		setTitlePane();
 
-		hld = new HtmlLayoutData("content");
 		LoginPane login = new LoginPane();
-		login.setId("content");
-		login.setLayoutData(hld);
-		htmlLayout.add(login);
+		setCentralPanel(login);
 
 		return htmlLayout;
 
@@ -97,16 +94,13 @@ public class Desktop extends ContentPane {
 		setTitlePane();
 
 		hld = new HtmlLayoutData("menu");
-		MenuPane menu = new MenuPane();
-		menu.setId("menu");
-		menu.setLayoutData(hld);
-		htmlLayout.add(menu);
+		MenuPane menuPanel = new MenuPane();
+		menuPanel.setId("menu");
+		menuPanel.setLayoutData(hld);
+		htmlLayout.add(menuPanel);
 
-		hld = new HtmlLayoutData("content");
 		MainPane main = new MainPane();
-		main.setId("content");
-		main.setLayoutData(hld);
-		htmlLayout.add(main);
+		setCentralPanel(main);
 
 		return htmlLayout;
 
@@ -147,6 +141,16 @@ public class Desktop extends ContentPane {
 
 	// --------------------------------------------------------------------------------
 
+	public void removeDesktop() {
+
+		htmlLayout.removeAll();
+		htmlLayout = null;
+		removeAll();
+
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public void setWindowPaneEmergente(String texto) {
 
 		window = new RaisManagerWindow(texto);
@@ -156,21 +160,13 @@ public class Desktop extends ContentPane {
 
 	// --------------------------------------------------------------------------------
 
-	public void setInstructionWindow(Panel pane) {
+	public void setInstructionWindow(Panel panel) {
 
-		window = new RaisManagerWindow(pane);
+		window = new RaisManagerWindow(panel);
 		add(window);
 
 	}
 
 	// --------------------------------------------------------------------------------
-
-	public void removeDesktop() {
-
-		htmlLayout.removeAll();
-		htmlLayout = null;
-		removeAll();
-
-	}
 
 }

@@ -261,9 +261,9 @@ public class RegisterPane extends Panel {
 		col.add(rowCaptcha);
 
 		Row rowButtons = new Row();
+		rowButtons.setStyle(GUIStyles.CENTER_ROW_STYLE);
 		rowButtons.setCellSpacing(new Extent(5));
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
-		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button btnCancel = new Button("Cancelar");
 		btnCancel.setStyle(GUIStyles.BUTTON_STYLE);

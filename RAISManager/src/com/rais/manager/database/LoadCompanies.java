@@ -1,5 +1,11 @@
 package com.rais.manager.database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.hibernate.Session;
 
 public class LoadCompanies {
@@ -8,14 +14,16 @@ public class LoadCompanies {
 
 	// --------------------------------------------------------------------------------
 
-	public static void main(String[] args) {
+	private LoadCompanies() {
+
+		System.out.println("Cargar datos de compañías");
 
 		Group[] group = new Group[COMPANIES_NUM];
 
 		for (int i = 0; i < group.length; i++) {
 
 			group[i] = new Group();
-			group[i].setName("Compañía " + Integer.toString(i + 1));
+			group[i].setName("Compañia " + Integer.toString(i + 1));
 
 //			FillImage image = new FillImage( //
 //					ImageReferenceCache.getInstance().getImageReference( //
@@ -23,11 +31,9 @@ public class LoadCompanies {
 //
 //			group[i].setLogo(image.getImage().getRenderId().getBytes());
 
-//			Company company = new Company( //
-//					"/com/rais/manager/images/companies/company" //
+//			byte[] logo = loadLogo("/com/rais/manager/images/companies/company" //
 //					+ Integer.toString((i + 1)) + ".png");
 //
-//			byte[] logo = company.getLogo();
 //			group[i].setLogo(logo);
 
 		}
@@ -46,61 +52,35 @@ public class LoadCompanies {
 
 	// --------------------------------------------------------------------------------
 
+	@SuppressWarnings("unused")
+	private byte[] loadLogo(String name) {
+
+		File file = new File(getClass().getResource(name).getPath());
+
+		byte[] data = new byte[(int) file.length()];
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			is.read(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return data;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	@SuppressWarnings("unused")
+	public static void main(String[] args) {
+		LoadCompanies loadCompanies = new LoadCompanies();
+	}
+
+	// --------------------------------------------------------------------------------
+
 }
-
-//--------------------------------------------------------------------------------
-
-//class Company {
-//
-//	private byte[] logo;
-//	private String pathName;
-//
-//	// --------------------------------------------------------------------------------
-//
-//	public Company(String name) {
-//
-//		pathName = getClass().getResource(name).getPath();
-//		File file = new File(pathName);
-//
-//		byte[] data = new byte[(int) file.length()];
-//		InputStream is = null;
-//		try {
-//			is = new FileInputStream(file);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//		try {
-//			is.read(data);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		this.logo = data;
-//
-//	}
-//
-//	// --------------------------------------------------------------------------------
-//
-//	public byte[] getLogo() {
-//		return logo;
-//	}
-//
-//	public void setLogo(byte[] logo) {
-//		this.logo = logo;
-//	}
-//
-//	// --------------------------------------------------------------------------------
-//
-//	public String getPathName() {
-//		return pathName;
-//	}
-//
-//	public void setPathName(String pathName) {
-//		this.pathName = pathName;
-//	}
-//
-//	// --------------------------------------------------------------------------------
-//
-//}
-
-//--------------------------------------------------------------------------------

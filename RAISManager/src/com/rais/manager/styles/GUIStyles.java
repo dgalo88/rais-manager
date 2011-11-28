@@ -8,13 +8,13 @@ import nextapp.echo.app.Component;
 import nextapp.echo.app.Extent;
 import nextapp.echo.app.FillImage;
 import nextapp.echo.app.Font;
+import nextapp.echo.app.Font.Typeface;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.MutableStyle;
 import nextapp.echo.app.Panel;
 import nextapp.echo.app.ResourceImageReference;
 import nextapp.echo.app.Row;
 import nextapp.echo.app.Style;
-import nextapp.echo.app.Font.Typeface;
 
 public class GUIStyles {
 

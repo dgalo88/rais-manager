@@ -1,6 +1,5 @@
 package com.rais.manager.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -13,8 +12,8 @@ import com.rais.manager.database.GroupStudent;
 import com.rais.manager.database.SessionHibernate;
 import com.rais.manager.database.Student;
 import com.rais.manager.database.User;
+import com.rais.manager.interfaz.AddStudentPane;
 import com.rais.manager.interfaz.RegisterPane;
-import com.rais.manager.interfaz.RegisterStudentPane;
 
 public class Register {
 
@@ -26,7 +25,7 @@ public class Register {
 
 	// --------------------------------------------------------------------------------
 
-	public static boolean createUser(RegisterPane pane) {
+	public static boolean createUser(RegisterPane panel) {
 
 		Session session = null;
 
@@ -35,17 +34,18 @@ public class Register {
 			session = SessionHibernate.getInstance().getSession();
 			session.beginTransaction();
 
-			if (!checkAliasUsed(session, pane)) {
-				pane.setMessage("El nombre de usuario no está disponible");
+			if (!checkAliasUsed(session, panel.getTxtAlias().getText())) {
+				panel.setMessage("El nombre de usuario no está disponible");
 				return false;
 			}
 
-			if (!checkCedulaExists(session, pane)) {
-				pane.setMessage("El estudiante ya ha sido registrado");
+			if (!checkCedulaExists(session, panel.getTxtCedula().getText())) {
+				panel.setMessage("El estudiante ya ha sido registrado");
 				return false;
 			}
 
-			registerUser(session, pane);
+			registerUser(session, panel.getUser(), panel.getTxtName().getText(), //
+					panel.getTxtCedula().getText(), panel.getFldPassword().getText());
 
 		} finally {
 
@@ -70,54 +70,7 @@ public class Register {
 
 	// --------------------------------------------------------------------------------
 
-	private static boolean checkAliasUsed( //
-			Session session, RegisterPane pane) {
-
-		Criteria criteria = session.createCriteria( //
-				User.class).add(Restrictions.eq( //
-						"alias", pane.getTxtAlias().getText()));
-
-		return criteria.list().isEmpty();
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private static boolean checkCedulaExists( //
-			Session session, RegisterPane pane) {
-
-		Criteria criteria = session.createCriteria( //
-				User.class).add(Restrictions.eq( //
-						"cedula", pane.getTxtCedula().getText()));
-
-		return criteria.list().isEmpty();
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private static void registerUser(Session session, RegisterPane pane) {
-
-		User bean = pane.getUser();
-
-		bean.setName(pane.getTxtName().getText());
-		bean.setCedula(pane.getTxtCedula().getText());
-		try {
-			bean.setPassword(Data.encrypt( //
-					pane.getFldPassword().getText()));
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		session.saveOrUpdate(bean);
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	public static void registerStudent(RegisterStudentPane panel) {
+	public static boolean createUser(AddStudentPane panel) {
 
 		Session session = null;
 
@@ -126,35 +79,15 @@ public class Register {
 			session = SessionHibernate.getInstance().getSession();
 			session.beginTransaction();
 
-			User user = panel.getUser();
-
-			Student student = new Student();
-			student.setUserRef(user);
-			session.saveOrUpdate(student);
-
-			Group group = panel.getGroup();
-
-			GroupStudent groupStudent = new GroupStudent();
-			groupStudent.setStudentRef(student);
-			groupStudent.setGroupRef(group);
-			session.saveOrUpdate(groupStudent);
-
-			List<GroupStudent> groupStudentList;
-			if (student.getGroupStudentList().isEmpty()) {
-				groupStudentList = new ArrayList<GroupStudent>();
-			} else {
-				groupStudentList = student.getGroupStudentList();
+			if (!checkCedulaExists(session, panel.getTxtCedula().getText())) {
+				panel.setMessage("El estudiante ya ha sido registrado");
+				return false;
 			}
-			groupStudentList.add(groupStudent);
-			group.setGroupStudentList(groupStudentList);
-			student.setGroupStudentList(groupStudentList);
 
-			session.saveOrUpdate(group);
-			session.saveOrUpdate(student);
-
-			user.setStudentRef(student);
-			user.setTeacherRef(null);
-			session.saveOrUpdate(user);
+			registerUser(session, //
+					panel.getTxtName().getText(), //
+					panel.getTxtCedula().getText(), //
+					panel.getCompany());
 
 		} finally {
 
@@ -173,6 +106,113 @@ public class Register {
 			}
 
 		}
+		return true;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static boolean checkAliasUsed( //
+			Session session, String alias) {
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"alias", alias));
+
+		return criteria.list().isEmpty();
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static boolean checkCedulaExists( //
+			Session session, String cedula) {
+
+		Criteria criteria = session.createCriteria( //
+				User.class).add(Restrictions.eq( //
+						"cedula", cedula));
+
+		return criteria.list().isEmpty();
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void registerUser(Session session, User user, //
+			String name, String cedula, String password) {
+
+		user.setName(name);
+		user.setCedula(cedula);
+
+		try {
+			user.setPassword(Data.encrypt(password));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		session.saveOrUpdate(user);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static User registerUser(Session session, //
+			String name, String cedula, Group group) {
+
+		User user = new User();
+
+		user.setName(name);
+		user.setCedula(cedula);
+
+		try {
+			user.setPassword(Data.encrypt( //
+					cedula.substring(cedula.length() - 6)));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		session.save(user);
+
+		registerStudent(session, user, group);
+
+		return user;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void registerStudent(Session session, User user, Group group) {
+
+		Student student = new Student();
+		student.setUserRef(user);
+		session.save(student);
+
+		GroupStudent groupStudent = new GroupStudent();
+		groupStudent.setStudentRef(student);
+		groupStudent.setGroupRef(group);
+		session.save(groupStudent);
+
+		user.setStudentRef(student);
+		user.setTeacherRef(null);
+		session.update(user);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void registerStudent(User user, Group group) {
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		registerStudent(session, user, group);
+
+		session.getTransaction().commit();
+		session.close();
 
 	}
 
@@ -182,33 +222,16 @@ public class Register {
 	public static List<Group> loadCompaniesData() {
 
 		List<Group> groupList;
-		Session session = null;
 
-		try {
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
 
-			session = SessionHibernate.getInstance().getSession();
-			session.beginTransaction();
+		groupList = session.createCriteria( //
+				Group.class).addOrder(Order.asc("id")).list();
 
-			groupList = session.createCriteria( //
-					Group.class).addOrder(Order.asc("id")).list();
+		session.getTransaction().commit();
+		session.close();
 
-		} finally {
-
-			// ----------------------------------------
-			// whatever happens, always close
-			// ----------------------------------------
-
-			if (session != null) {
-
-				if (session.getTransaction() != null) {
-					session.getTransaction().commit();
-				}
-
-				session.close();
-
-			}
-
-		}
 		return groupList;
 
 	}

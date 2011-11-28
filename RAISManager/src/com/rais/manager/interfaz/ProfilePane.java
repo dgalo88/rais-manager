@@ -33,8 +33,6 @@ public class ProfilePane extends Panel {
 	public ProfilePane() {
 
 		user = app.getUser();
-		group = Data.getCompany(user);
-
 		initGui();
 
 	}
@@ -61,17 +59,10 @@ public class ProfilePane extends Panel {
 		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL, 14);
 		col.add(lblCedula);
 
-		Label lblCompany = new Label("Compañía: " + group.getName());
-		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL, 14);
-		col.add(lblCompany);
-
-		//Cargar logo de la Compañía
-//		app.setImageReference(new HttpImageReference( //
-//				"imagesdata?image_id=" + Integer.toString(group.getId())));
-//
-//		Label lblLogo = new Label(app.getImageReference());
-//		GUIStyles.setFont(lblLogo, GUIStyles.NORMAL, 14);
-//		col.add(lblLogo);
+		if (user.getStudentRef() != null) {
+			group = Data.getCompany(user);
+			addStudentGui();
+		}
 
 		Row buttonRow = new Row();
 		buttonRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
@@ -90,6 +81,24 @@ public class ProfilePane extends Panel {
 		col.add(buttonRow);
 		row.add(col);
 		add(row);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private void addStudentGui() {
+
+		Label lblCompany = new Label("Compañía: " + group.getName());
+		GUIStyles.setFont(lblCompany, GUIStyles.NORMAL, 14);
+		col.add(lblCompany);
+
+		//Cargar logo de la Compañía
+//		app.setImageReference(new HttpImageReference( //
+//				"imagesdata?image_id=" + Integer.toString(group.getId())));
+//
+//		Label lblLogo = new Label(app.getImageReference());
+//		GUIStyles.setFont(lblLogo, GUIStyles.NORMAL, 14);
+//		col.add(lblLogo);
 
 	}
 

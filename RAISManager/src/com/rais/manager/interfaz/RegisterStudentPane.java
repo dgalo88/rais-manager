@@ -200,7 +200,7 @@ public class RegisterStudentPane extends Panel {
 			return;
 		}
 
-		Register.registerStudent(this);
+		Register.registerStudent(user, group);
 		LoginPane panel = new LoginPane();
 		desktop.setCentralPanel(panel);
 
