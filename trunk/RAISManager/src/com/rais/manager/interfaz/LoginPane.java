@@ -19,6 +19,7 @@ import org.informagen.echo.app.IntegerTextField;
 
 import com.rais.manager.Desktop.DesktopType;
 import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Data;
 import com.rais.manager.controller.Login;
 import com.rais.manager.styles.GUIStyles;
 
@@ -58,6 +59,8 @@ public class LoginPane extends Panel {
 
 		txtCedula = new IntegerTextField();
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
+		txtCedula.setToolTipText("Ingrese la cédula del estudiante " +
+				"usando el siguiente formato: Ej: 012345678");
 		txtCedula.setMaximumLength(9);
 		txtCedula.setMinimumValue(0);
 		grid.add(txtCedula);
@@ -129,9 +132,11 @@ public class LoginPane extends Panel {
 			return;
 		}
 
+		txtCedula.setText(Data.checkCedulaFormat(txtCedula.getText()));
+
 		if (!Login.login(this)) {
 			app.getDesktop().setWindowPaneEmergente( //
-					"Número de cédula no válido");
+					"Combinación usuario-contraseña no válida");
 			return;
 		}
 

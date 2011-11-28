@@ -23,6 +23,22 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
+	public static User loadUser(int userId) {
+
+		Session session = SessionHibernate.getInstance().getSession();
+		session.beginTransaction();
+
+		User user = loadUser(session, userId);
+
+		session.getTransaction().commit();
+		session.close();
+
+		return user;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
 	private static User loadUser(Session session, int userId) {
 
 		Criteria criteria = session.createCriteria( //
@@ -107,6 +123,20 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
+	public static String checkCedulaFormat(String cedula) {
+
+		String aux = "";
+		for (int i = 0; i <= 8 - cedula.length(); i++) {
+			aux += "0";
+		}
+		aux += cedula;
+
+		return aux;
+
+	}
+
+	// --------------------------------------------------------------------------------
+
 	public static boolean checkPassword(String password, User user) {
 
 		boolean result = false;
@@ -136,8 +166,10 @@ public class Data {
 
 	// --------------------------------------------------------------------------------
 
-	public static void changePassword( //
+	public static String changePassword( //
 			String newPassword, User user) throws Exception {
+
+		String message = "";
 
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
@@ -146,14 +178,19 @@ public class Data {
 
 		try {
 			user.setPassword(encrypt(newPassword));
+			message = "Contraseña cambiada con éxito";
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
+			message = "Se ha producido un error. No se cambió la contraseña";
 		} catch (Exception e) {
 			e.printStackTrace();
+			message = "Se ha producido un error. No se cambió la contraseña";
 		}
 
 		session.getTransaction().commit();
 		session.close();
+
+		return message;
 
 	}
 

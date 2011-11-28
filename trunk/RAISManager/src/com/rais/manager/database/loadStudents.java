@@ -25,6 +25,8 @@ public class loadStudents {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
+		System.out.println("Cargar datos de estudiantes");
+
 		Session session = SessionHibernate.getInstance().getSession();
 		session.beginTransaction();
 
@@ -49,7 +51,7 @@ public class loadStudents {
 		for (int i = 0; i < teacher.length; i++) {
 
 			user[i] = new User();
-			user[i].setCedula(Integer.toString(1234 + i));
+			user[i].setCedula(Data.checkCedulaFormat(Integer.toString(1234 + i)));
 			user[i].setName("Jefe Ejecutivo " + Integer.toString(i + 1));
 
 			try {
@@ -109,8 +111,11 @@ public class loadStudents {
 
 			user[i] = new User();
 			user[i].setName("Estudiante Numero " + (i + 1));
-			user[i].setCedula(Integer.toString(i + 1));
+			user[i].setCedula(Data.checkCedulaFormat(Integer.toString(i + 1)));
 			try {
+//				user[i].setPassword(Data.encrypt( //
+//						user[i].getCedula().substring( //
+//								user[i].getCedula().length() - 6)));
 				user[i].setPassword(Data.encrypt("123456"));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
