@@ -3,6 +3,11 @@ package com.rais.manager.interfaz;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rais.manager.RaisManagerApp;
+import com.rais.manager.controller.Import;
+import com.rais.manager.database.User;
+import com.rais.manager.styles.GUIStyles;
+
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
@@ -17,13 +22,8 @@ import nextapp.echo.app.TextField;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
-import com.rais.manager.RaisManagerApp;
-import com.rais.manager.controller.Import;
-import com.rais.manager.database.User;
-import com.rais.manager.styles.GUIStyles;
-
 @SuppressWarnings("serial")
-public class ImportStudentsPane extends Panel {
+public class ImportTeachersPane extends Panel {
 
 	private RaisManagerApp app = (RaisManagerApp) //
 			RaisManagerApp.getActive();
@@ -35,14 +35,13 @@ public class ImportStudentsPane extends Panel {
 	private List<User> userList;
 	private List<String> names;
 	private List<String> cedulas;
-	private List<String> companies;
 
 	private Column col;
 	private Row tableRow;
 
 	// --------------------------------------------------------------------------------
 
-	public ImportStudentsPane() {
+	public ImportTeachersPane() {
 		initGui();
 	}
 
@@ -60,7 +59,7 @@ public class ImportStudentsPane extends Panel {
 
 		col.add(Constructor.initTopRow( //
 				"Ingrese la dirección del archivo csv " //
-				+ "con la información de los estudiantes:", 12));
+				+ "con la información de los profesores:", 12));
 
 		row = new Row();
 		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
@@ -100,30 +99,29 @@ public class ImportStudentsPane extends Panel {
 		if (txtPathFile.getText().isEmpty()) {
 			app.getDesktop().setWindowPaneEmergente( //
 					"Ingrese la dirección del archivo csv " //
-					+ "con la información de los estudiantes:");
+					+ "con la información de los profesores:");
 			return;
 		}
 
 		col.removeAll();
-		addStudentTable();
+		addTeachersTable();
 
 	}
 
 	// --------------------------------------------------------------------------------
 
-	private void addStudentTable() {
+	private void addTeachersTable() {
 
 		// ----------------------------------------
-		// Cargar datos de los estudiantes
+		// Cargar datos de los profesores
 		// ----------------------------------------
 
 		names = new ArrayList<String>();
 		cedulas = new ArrayList<String>();
-		companies = new ArrayList<String>();
 
 		try {
-			Import.loadStudentsData(txtPathFile.getText(), //
-					names, cedulas, companies);
+			Import.loadTeachersData( //
+					txtPathFile.getText(), names, cedulas);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,7 +129,7 @@ public class ImportStudentsPane extends Panel {
 		tableRow = new Row();
 		tableRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
-		Grid grid = new Grid(3);
+		Grid grid = new Grid();
 		grid.setBackground(Color.WHITE);
 		grid.setColumnWidth(0, new Extent(200));
 		grid.setColumnWidth(1, new Extent(100));
@@ -140,7 +138,7 @@ public class ImportStudentsPane extends Panel {
 		grid.setBorder(new Border( //
 				new Extent(1), Color.BLACK, Border.STYLE_INSET));
 
-		col.add(Constructor.initTopRow("Lista de estudiantes para registrar", 12));
+		col.add(Constructor.initTopRow("Lista de profesores para registrar", 12));
 
 		Row centerRow = new Row();
 		centerRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
@@ -158,14 +156,6 @@ public class ImportStudentsPane extends Panel {
 		centerRow.add(lblCedula);
 		grid.add(centerRow);
 
-		centerRow = new Row();
-		centerRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
-
-		Label lblCompany = new Label("Compañía");
-		GUIStyles.setFont(lblCompany, GUIStyles.BOLD);
-		centerRow.add(lblCompany);
-		grid.add(centerRow);
-
 		for (int i = 0; i < names.size(); i++) {
 
 			lblName = new Label(names.get(i));
@@ -175,10 +165,6 @@ public class ImportStudentsPane extends Panel {
 			lblCedula = new Label(cedulas.get(i));
 			GUIStyles.setFont(lblCedula, GUIStyles.NORMAL);
 			grid.add(lblCedula);
-
-			lblCompany = new Label(companies.get(i));
-			GUIStyles.setFont(lblCompany, GUIStyles.NORMAL);
-			grid.add(lblCompany);
 
 		}
 		tableRow.add(grid);
@@ -229,10 +215,10 @@ public class ImportStudentsPane extends Panel {
 
 		userList = new ArrayList<User>();
 		try {
-			Import.loadStudents(this, userList);
+			Import.loadTeachers(this, userList);
 		} catch (Exception e) {
 			message = "Ha ocurrido un error. " //
-					+ "Los estudiantes no han sido registrados";
+					+ "Los profesores no han sido registrados";
 			e.printStackTrace();
 		}
 
@@ -278,14 +264,6 @@ public class ImportStudentsPane extends Panel {
 
 	public void setCedulas(List<String> cedulas) {
 		this.cedulas = cedulas;
-	}
-
-	public List<String> getCompanies() {
-		return companies;
-	}
-
-	public void setCompanies(List<String> companies) {
-		this.companies = companies;
 	}
 
 	// --------------------------------------------------------------------------------
