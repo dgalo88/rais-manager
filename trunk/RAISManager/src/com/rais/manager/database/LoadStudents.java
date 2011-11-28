@@ -1,28 +1,26 @@
 package com.rais.manager.database;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 
 import com.rais.manager.controller.Data;
+import com.rais.manager.controller.Register;
 
-public class loadStudents {
+public class LoadStudents {
 
 	public static final int STUDENTS_NUM = 10;
 	public static final int TEACHERS_NUM = 1;
 
 	// --------------------------------------------------------------------------------
 
-	private loadStudents() {
+	private LoadStudents() {
 		/* empty */
 	}
 
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
 		System.out.println("Cargar datos de estudiantes");
@@ -34,8 +32,7 @@ public class loadStudents {
 
 		//Cargar compañías
 
-		List<Group> groupList = session.createCriteria( //
-				Group.class).addOrder(Order.asc("id")).list();
+		List<Group> groupList = Register.loadCompaniesData();
 
 		Group[] group = new Group[groupList.size()];
 		for (int i = 0; i < group.length; i++) {
@@ -52,7 +49,7 @@ public class loadStudents {
 
 			user[i] = new User();
 			user[i].setCedula(Data.checkCedulaFormat(Integer.toString(1234 + i)));
-			user[i].setName("Jefe Ejecutivo " + Integer.toString(i + 1));
+			user[i].setName("Jefe Ejecutivo 0" + Integer.toString(i + 1));
 
 			try {
 				user[i].setPassword(Data.encrypt("123456"));
@@ -67,14 +64,6 @@ public class loadStudents {
 			teacher[i].setUserRef(user[i]);
 			session.save(teacher[i]);
 
-			List<GroupTeacher> groupTeacherList;
-
-			if (teacher[i].getGroupTeacherList() == null) {
-				groupTeacherList = new ArrayList<GroupTeacher>();
-			} else {
-				groupTeacherList = teacher[i].getGroupTeacherList();
-			}
-
 			for (int j = 0; j < group.length; j++) {
 
 				GroupTeacher groupTeacher = new GroupTeacher();
@@ -82,16 +71,7 @@ public class loadStudents {
 				groupTeacher.setTeacherRef(teacher[i]);
 				session.save(groupTeacher);
 
-				groupTeacherList.add(groupTeacher);
-
 			}
-
-			for (int k = 0; k < group.length; k++) {
-				group[k].setGroupTeacherList(groupTeacherList);
-				session.update(group[k]);
-			}
-
-			teacher[i].setGroupTeacherList(groupTeacherList);
 			session.update(teacher[i]);
 
 			//Me aseguro que si el usuario es profesor
@@ -105,12 +85,11 @@ public class loadStudents {
 		//Cargar estudiantes
 
 		Student[] student = new Student[STUDENTS_NUM];
-		List<GroupStudent> groupStudentList;
 
 		for (int i = 0; i < student.length; i++) {
 
 			user[i] = new User();
-			user[i].setName("Estudiante Numero " + (i + 1));
+			user[i].setName("Estudiante Numero 0" + (i + 1));
 			user[i].setCedula(Data.checkCedulaFormat(Integer.toString(i + 1)));
 			try {
 //				user[i].setPassword(Data.encrypt( //
@@ -134,19 +113,6 @@ public class loadStudents {
 			groupStudent.setGroupRef(group[index]);
 			groupStudent.setStudentRef(student[i]);
 			session.save(groupStudent);
-
-			if (student[i].getGroupStudentList() == null) {
-				groupStudentList = new ArrayList<GroupStudent>();
-			} else {
-				groupStudentList = student[i].getGroupStudentList();
-			}
-			groupStudentList.add(groupStudent);
-
-			student[i].setGroupStudentList(groupStudentList);
-			group[index].setGroupStudentList(groupStudentList);
-
-			session.update(group[index]);
-			session.update(student[i]);
 
 			//Me aseguro que si el usuario es estudiante
 			//la referencia a profesor es null

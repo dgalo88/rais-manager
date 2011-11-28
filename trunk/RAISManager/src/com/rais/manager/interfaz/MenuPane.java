@@ -76,6 +76,16 @@ public class MenuPane extends Panel {
 			});
 			col.add(btnAddStudent);
 
+			Button btnAddTeacher = new Button("Agregar Profesores");
+			btnAddTeacher.setStyle(GUIStyles.BUTTON_STYLE);
+			btnAddTeacher.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent evt) {
+					btnAddTeacherClicked();
+				}
+			});
+			col.add(btnAddTeacher);
+
 		}
 //		Button btnWorks = new Button("Tareas");
 //		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
@@ -125,6 +135,15 @@ public class MenuPane extends Panel {
 	private void btnAddStudentClicked() {
 
 		AddStudentPane panel = new AddStudentPane();
+		app.getDesktop().setCentralPanel(panel);
+
+	}
+
+	// --------------------------------------------------------------------------------
+
+	private void btnAddTeacherClicked() {
+
+		AddTeacherPane panel = new AddTeacherPane();
 		app.getDesktop().setCentralPanel(panel);
 
 	}
