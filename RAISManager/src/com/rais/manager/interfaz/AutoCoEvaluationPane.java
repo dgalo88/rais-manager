@@ -569,7 +569,7 @@ public class AutoCoEvaluationPane extends Panel {
 		}
 
 		try {
-			Polls.answerCoEvaluation(this, app.getUser());
+			Polls.answerCoEvaluation(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

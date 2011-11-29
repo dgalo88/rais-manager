@@ -24,6 +24,7 @@ public class GUIStyles {
 	public static final Color BORDER_COLOR_DEFAULT = new Color(80, 100, 150);
 	public static final Color PRESSED_COLOR_DEFAULT = new Color(90, 125, 190);
 	public static final Color ROLLOVER_COLOR_DEFAULT = new Color(135, 170, 230);
+	public static final Color BUTTON_BACKGROUND_COLOR = new Color(80, 135, 230);
 
 	public static final Color ERROR_COLOR = new Color(250, 250, 150);
 
@@ -126,7 +127,64 @@ public class GUIStyles {
 		}
 	}
 
+	// --------------------------------------------------------------------------------
+
 	public static void setFont(Component component, int fontStyle, int size) {
+
+		switch (fontStyle) {
+		case 0:
+			component.setFont(new Font(FONT_FACE, Font.PLAIN, new Extent(size)));
+			break;
+		case 1:
+			component.setFont(new Font(FONT_FACE, Font.BOLD, new Extent(size)));
+			break;
+		case 2:
+			component.setFont(new Font(FONT_FACE, Font.ITALIC, new Extent(size)));
+			break;
+		case 3:
+			component.setFont(new Font(FONT_FACE, Font.UNDERLINE, new Extent(size)));
+			break;
+		case 4:
+			component.setFont(new Font(FONT_FACE, Font.OVERLINE, new Extent(size)));
+			break;
+		default:
+			break;
+		}
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void setFont(Component component, int fontStyle, Color color) {
+
+		component.setForeground(color);
+
+		switch (fontStyle) {
+		case 0:
+			component.setFont(new Font(FONT_FACE, Font.PLAIN, FONT_SIZE));
+			break;
+		case 1:
+			component.setFont(new Font(FONT_FACE, Font.BOLD, FONT_SIZE));
+			break;
+		case 2:
+			component.setFont(new Font(FONT_FACE, Font.ITALIC, FONT_SIZE));
+			break;
+		case 3:
+			component.setFont(new Font(FONT_FACE, Font.UNDERLINE, FONT_SIZE));
+			break;
+		case 4:
+			component.setFont(new Font(FONT_FACE, Font.OVERLINE, FONT_SIZE));
+			break;
+		default:
+			break;
+		}
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public static void setFont( //
+			Component component, int fontStyle, int size, Color color) {
+
+		component.setForeground(color);
 
 		switch (fontStyle) {
 		case 0:

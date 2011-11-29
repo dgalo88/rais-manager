@@ -139,7 +139,7 @@ public class Polls {
 		//1) Cargar lista de compañeros
 		//2) Crear encuesta para cada compañero
 		panel.setPartnersList(loadPartnersData(user));
-		createCoEvaluations(panel, session, student);
+		createCoEvaluations(panel, session);
 
 		session.getTransaction().commit();
 		session.close();
@@ -148,21 +148,14 @@ public class Polls {
 
 	// --------------------------------------------------------------------------------
 
-	private static void createCoEvaluations(AutoCoEvaluationPane panel, //
-			Session session, Student student) {
+	private static void createCoEvaluations( //
+			AutoCoEvaluationPane panel, Session session) {
 
 		Criteria criteria = session.createCriteria( //
 				Poll.class).add(Restrictions.eq( //
 						"id", panel.getPoll().getId()));
 
 		Poll poll = (Poll) criteria.uniqueResult();
-
-		List<PollStudent> pollStudentList;
-		if (student.getPollStudentList() != null) {
-			pollStudentList = student.getPollStudentList();
-		} else {
-			pollStudentList = new ArrayList<PollStudent>();
-		}
 
 		List<User> partnersList = panel.getPartnersList();
 
@@ -183,18 +176,13 @@ public class Polls {
 
 			session.save(pollStudent);
 
-			pollStudentList.add(pollStudent);
-
 		}
-
-		session.update(student);
-		session.update(poll);
 
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public static void answerCoEvaluation(AutoCoEvaluationPane panel, User user) //
+	public static void answerCoEvaluation(AutoCoEvaluationPane panel) //
 			throws IOException {
 
 		Session session = SessionHibernate.getInstance().getSession();
@@ -218,9 +206,13 @@ public class Polls {
 							"id", partnersList.get(i).getId()));
 
 			User userPartner = (User) criteria.uniqueResult();
-			Student studentPartner = (Student) userPartner.getStudentRef();
 
-			PollStudent pollStudent = getPollStudent(studentPartner, pollStudentList);
+			PollStudent pollStudent = getPollStudent( //
+					userPartner.getStudentRef(), pollStudentList);
+
+			if (pollStudent == null) {
+				continue;
+			}
 
 			for (int j = 0; j < 4; j++) {
 				if (coRadioButtons[i][j].isSelected()) {
@@ -230,10 +222,8 @@ public class Polls {
 			pollStudent.setStatus(Polls.ANSWERED);
 
 			session.update(pollStudent);
-			session.update(studentPartner);
 
 		}
-		session.update(poll);
 
 		session.getTransaction().commit();
 		session.close();
@@ -276,6 +266,7 @@ public class Polls {
 		default:
 			break;
 		}
+
 		return option;
 
 	}
@@ -369,7 +360,6 @@ public class Polls {
 
 			}
 
-
 		} finally {
 
 			// ----------------------------------------
@@ -409,8 +399,6 @@ public class Polls {
 				return;
 			}
 
-			List<Poll> pollList;
-
 			for (int i = 0; i < studentList.size(); i++) {
 
 				Student student = studentList.get(i);
@@ -422,17 +410,8 @@ public class Polls {
 				poll.setStatus(Polls.PENDING);
 				poll.setStudentRef(student);
 				poll.setGroupRef(group);
+
 				session.save(poll);
-
-				if (student.getPollList() == null) {
-					pollList = new ArrayList<Poll>();
-				} else {
-					pollList = student.getPollList();
-				}
-				pollList.add(poll);
-
-				student.setPollList(pollList);
-				session.update(student);
 
 			}
 

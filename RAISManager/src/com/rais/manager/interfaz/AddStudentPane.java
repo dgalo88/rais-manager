@@ -133,7 +133,7 @@ public class AddStudentPane extends Panel {
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnCancelClicked();
+				app.getDesktop().btnCancelClicked();
 			}
 		});
 		centerRow.add(btnCancel);
@@ -198,15 +198,6 @@ public class AddStudentPane extends Panel {
 			return;
 		}
 		company = companiesList.get(selectedIndex - 1);
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private void btnCancelClicked() {
-
-		MainPane panel = new MainPane();
-		app.getDesktop().setCentralPanel(panel);
 
 	}
 
