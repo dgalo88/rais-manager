@@ -105,7 +105,7 @@ public class AddTeacherPane extends Panel {
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				btnCancelClicked();
+				app.getDesktop().btnCancelClicked();
 			}
 		});
 		centerRow.add(btnCancel);
@@ -144,15 +144,6 @@ public class AddTeacherPane extends Panel {
 
 		row.add(col);
 		add(row);
-
-	}
-
-	// --------------------------------------------------------------------------------
-
-	private void btnCancelClicked() {
-
-		MainPane panel = new MainPane();
-		app.getDesktop().setCentralPanel(panel);
 
 	}
 

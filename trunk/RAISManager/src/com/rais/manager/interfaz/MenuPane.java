@@ -1,6 +1,5 @@
 package com.rais.manager.interfaz;
 
-import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Column;
 import nextapp.echo.app.Insets;
@@ -9,7 +8,7 @@ import nextapp.echo.app.Row;
 import nextapp.echo.app.event.ActionEvent;
 import nextapp.echo.app.event.ActionListener;
 
-import com.rais.manager.Desktop.DesktopType;
+import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Data;
 import com.rais.manager.database.User;
@@ -39,8 +38,8 @@ public class MenuPane extends Panel {
 	private void initGui() {
 
 		Row row = new Row();
+		row.setStyle(GUIStyles.CENTER_ROW_STYLE);
 		row.setInsets(new Insets(0, 10, 0, 0));
-		row.setAlignment(Alignment.ALIGN_LEFT);
 
 		col = new Column();
 
@@ -87,6 +86,7 @@ public class MenuPane extends Panel {
 			col.add(btnAddTeacher);
 
 		}
+
 //		Button btnWorks = new Button("Tareas");
 //		btnWorks.setStyle(GUIStyles.BUTTON_STYLE);
 //		btnWorks.addActionListener(new ActionListener() {
@@ -162,7 +162,7 @@ public class MenuPane extends Panel {
 	private void btnExitClicked() {
 
 		app.setUser(null);
-		app.setNewDesktop(DesktopType.INDEX);
+		app.setNewDesktop(Desktop.INDEX);
 
 	}
 

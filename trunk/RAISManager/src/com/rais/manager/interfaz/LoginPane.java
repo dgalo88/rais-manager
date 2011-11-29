@@ -1,6 +1,5 @@
 package com.rais.manager.interfaz;
 
-import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Border;
 import nextapp.echo.app.Button;
 import nextapp.echo.app.Color;
@@ -17,7 +16,7 @@ import nextapp.echo.app.event.ActionListener;
 
 import org.informagen.echo.app.IntegerTextField;
 
-import com.rais.manager.Desktop.DesktopType;
+import com.rais.manager.Desktop;
 import com.rais.manager.RaisManagerApp;
 import com.rais.manager.controller.Data;
 import com.rais.manager.controller.Login;
@@ -32,9 +31,13 @@ public class LoginPane extends Panel {
 	private IntegerTextField txtCedula;
 	private PasswordField fldPassword;
 
+	// --------------------------------------------------------------------------------
+
 	public LoginPane() {
 		initGui();
 	}
+
+	// --------------------------------------------------------------------------------
 
 	private void initGui() {
 
@@ -46,12 +49,15 @@ public class LoginPane extends Panel {
 		Column col = new Column();
 		col.setCellSpacing(new Extent(5));
 
-		col.add(Constructor.initTopRow("Ingresar al Sistema", 14));
+		Row centerRow = new Row();
+		centerRow.setStyle(GUIStyles.CENTER_ROW_STYLE);
 
 		Grid grid = new Grid();
 		grid.setInsets(new Insets(5, 5, 5, 5));
 		grid.setBorder(new Border( //
 				new Extent(1), Color.BLACK, Border.STYLE_INSET));
+
+		col.add(Constructor.initTopRow("Ingresar al Sistema", 14));
 
 		Label lblCedula = new Label("Cédula:");
 		GUIStyles.setFont(lblCedula, GUIStyles.NORMAL);
@@ -59,8 +65,8 @@ public class LoginPane extends Panel {
 
 		txtCedula = new IntegerTextField();
 		GUIStyles.setFont(txtCedula, GUIStyles.NORMAL);
-		txtCedula.setToolTipText("Ingrese la cédula del estudiante " +
-				"usando el siguiente formato: Ej: 012345678");
+		txtCedula.setToolTipText( //
+				"Ingrese la cédula usando el siguiente formato: Ej: 012345678");
 		txtCedula.setMaximumLength(9);
 		txtCedula.setMinimumValue(0);
 		grid.add(txtCedula);
@@ -71,17 +77,18 @@ public class LoginPane extends Panel {
 
 		fldPassword = new PasswordField();
 		GUIStyles.setFont(fldPassword, GUIStyles.NORMAL);
+		fldPassword.setToolTipText( //
+				"Ingrese la contraseña que utiliza para acceder al sistema. " + //
+				"Esta debe contener mínimo 6 dígitos");
 		grid.add(fldPassword);
 
-		Row centerRow = new Row();
-		centerRow.setAlignment(Alignment.ALIGN_CENTER);
 		centerRow.add(grid);
 		col.add(centerRow);
 
 		Row rowButtons = new Row();
+		rowButtons.setStyle(GUIStyles.CENTER_ROW_STYLE);
 		rowButtons.setCellSpacing(new Extent(5));
 		rowButtons.setInsets(new Insets(5, 5, 5, 5));
-		rowButtons.setAlignment(Alignment.ALIGN_CENTER);
 
 		Button btnEnter = new Button("Entrar");
 		btnEnter.setStyle(GUIStyles.BUTTON_STYLE);
@@ -140,7 +147,7 @@ public class LoginPane extends Panel {
 			return;
 		}
 
-		app.setNewDesktop(DesktopType.MAIN);
+		app.setNewDesktop(Desktop.MAIN);
 
 	}
 

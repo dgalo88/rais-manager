@@ -2,7 +2,6 @@ package com.rais.manager;
 
 import nextapp.echo.app.Alignment;
 import nextapp.echo.app.Color;
-import nextapp.echo.app.Component;
 import nextapp.echo.app.ContentPane;
 import nextapp.echo.app.Insets;
 import nextapp.echo.app.Label;
@@ -21,12 +20,8 @@ import echopoint.layout.HtmlLayoutData;
 public class Desktop extends ContentPane {
 
 	public static final String HTML_DIR = "/com/rais/manager/html/";
-	public static final String INDEX_HTML = "index.html";
-	public static final String MAIN_HTML = "main.html";
-
-	public enum DesktopType {
-		INDEX, MAIN
-	}
+	public static final String INDEX = "index.html";
+	public static final String MAIN = "main.html";
 
 	private RaisManagerWindow window;
 
@@ -35,63 +30,56 @@ public class Desktop extends ContentPane {
 
 	// --------------------------------------------------------------------------------
 
-	public Desktop(DesktopType desktopType) {
+	/**
+	 * 
+	 * @param template
+	 * <br>"index.html" load the system's login/register screen
+	 * <br>"main.html" load the system's main screen
+	 */
+	public Desktop(String template) {
 
-		switch (desktopType) {
+		try {
+			htmlLayout = new HtmlLayout( //
+					getClass().getResourceAsStream( //
+					HTML_DIR + template), "UTF-8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		setInsets(new Insets(10, 10, 10, 10));
+
+		htmlLayout.setBackground(new Color (255, 255, 255));
+		htmlLayout.setAlignment(Alignment.ALIGN_CENTER);
+
+		setTitlePane();
+
+		switch (template) {
 		case INDEX:
-			add(initIndex());
+			initIndex();
 			break;
 		case MAIN:
-			add(initMain());
+			initMain();
 			break;
 		default:
 			break;
 		}
 
+		add(htmlLayout);
+
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public Component initIndex() {
-
-		try {
-			htmlLayout = new HtmlLayout(getClass().getResourceAsStream( //
-					HTML_DIR + INDEX_HTML), "UTF-8");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		setInsets(new Insets(10, 10, 10, 10));
-
-		htmlLayout.setBackground(new Color (255, 255, 255));
-		htmlLayout.setAlignment(Alignment.ALIGN_CENTER);
-
-		setTitlePane();
+	private void initIndex() {
 
 		LoginPane login = new LoginPane();
 		setCentralPanel(login);
 
-		return htmlLayout;
-
 	}
 
 	// --------------------------------------------------------------------------------
 
-	public Component initMain() {
-
-		try {
-			htmlLayout = new HtmlLayout(getClass().getResourceAsStream( //
-					HTML_DIR + MAIN_HTML), "UTF-8");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		setInsets(new Insets(10, 10, 10, 10));
-
-		htmlLayout.setBackground(new Color (255, 255, 255));
-		htmlLayout.setAlignment(Alignment.ALIGN_CENTER);
-
-		setTitlePane();
+	private void initMain() {
 
 		hld = new HtmlLayoutData("menu");
 		MenuPane menuPanel = new MenuPane();
@@ -102,8 +90,6 @@ public class Desktop extends ContentPane {
 		MainPane main = new MainPane();
 		setCentralPanel(main);
 
-		return htmlLayout;
-
 	}
 
 	// --------------------------------------------------------------------------------
@@ -113,8 +99,8 @@ public class Desktop extends ContentPane {
 		hld = new HtmlLayoutData("title");
 
 		Panel titlePane = new Panel();
+		titlePane.setStyle(GUIStyles.CENTER_PANEL_STYLE);
 		titlePane.setInsets(new Insets(0, 10, 0, 10));
-		titlePane.setAlignment(Alignment.ALIGN_CENTER);
 
 		Label lblTitle = new Label("Sistema de Gestión RAIS");
 		GUIStyles.setFont(lblTitle, GUIStyles.BOLD, 16);
@@ -141,12 +127,18 @@ public class Desktop extends ContentPane {
 
 	// --------------------------------------------------------------------------------
 
-	public void removeDesktop() {
+	public void removeCurrent() {
 
 		htmlLayout.removeAll();
 		htmlLayout = null;
 		removeAll();
 
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public void btnCancelClicked() {
+		setCentralPanel(new MainPane());
 	}
 
 	// --------------------------------------------------------------------------------
