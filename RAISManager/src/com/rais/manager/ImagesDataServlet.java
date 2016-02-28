@@ -60,6 +60,8 @@ public class ImagesDataServlet extends HttpServlet {
 		InputStream is = new FileInputStream(file);
 		is.read(data);
 
+		is.close();
+
 		return data;
 
 	}

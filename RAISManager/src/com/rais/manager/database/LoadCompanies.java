@@ -70,6 +70,12 @@ public class LoadCompanies {
 			e.printStackTrace();
 		}
 
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return data;
 
 	}
